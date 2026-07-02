@@ -1,0 +1,47 @@
+name: nqaae_app
+description: "NQAAE University Dashboard App"
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.12.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  # State management
+  flutter_riverpod: ^2.6.1
+
+  # Navigation
+  go_router: ^14.6.2
+
+  # UI & Charts
+  fl_chart: ^0.69.0
+  google_fonts: ^6.2.1
+  flutter_svg: ^2.0.10+1
+  shimmer: ^3.0.0
+
+  # Localization
+  easy_localization: ^3.0.7
+
+  # Storage & Auth
+  shared_preferences: ^2.3.3
+  flutter_secure_storage: ^9.2.2
+
+  # Utils
+  intl: ^0.20.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/translations/
+    - assets/images/
+    - assets/icons/
