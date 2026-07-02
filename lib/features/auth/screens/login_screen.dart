@@ -70,17 +70,20 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
           Positioned(
             top: -80,
             left: -60,
-            child: _buildBlob(220, AppColors.primary.withOpacity(0.25)),
+            child: _buildBlob(220, AppColors.primary.withValues(alpha: 0.25)),
           ),
           Positioned(
             bottom: -60,
             right: -40,
-            child: _buildBlob(200, AppColors.accent.withOpacity(0.2)),
+            child: _buildBlob(200, AppColors.accent.withValues(alpha: 0.2)),
           ),
           Positioned(
             top: size.height * 0.4,
             left: size.width * 0.6,
-            child: _buildBlob(140, AppColors.primaryLight.withOpacity(0.15)),
+            child: _buildBlob(
+              140,
+              AppColors.primaryLight.withValues(alpha: 0.15),
+            ),
           ),
           // Main content
           SafeArea(
@@ -138,7 +141,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: AppColors.primary.withOpacity(0.4),
+                color: AppColors.primary.withValues(alpha: 0.4),
                 blurRadius: 20,
                 offset: const Offset(0, 8),
               ),
@@ -180,9 +183,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
         filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.06),
+            color: Colors.white.withValues(alpha: 0.06),
             borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: Colors.white.withOpacity(0.12)),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
           ),
           padding: const EdgeInsets.all(28),
           child: Column(
@@ -237,9 +240,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                     vertical: 8,
                   ),
                   decoration: BoxDecoration(
-                    color: AppColors.error.withOpacity(0.1),
+                    color: AppColors.error.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: AppColors.error.withOpacity(0.3)),
+                    border: Border.all(
+                      color: AppColors.error.withValues(alpha: 0.3),
+                    ),
                   ),
                   child: Row(
                     children: [
@@ -272,7 +277,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                     borderRadius: BorderRadius.circular(14),
                     boxShadow: [
                       BoxShadow(
-                        color: AppColors.primary.withOpacity(0.4),
+                        color: AppColors.primary.withValues(alpha: 0.4),
                         blurRadius: 16,
                         offset: const Offset(0, 6),
                       ),
@@ -340,14 +345,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
         prefixIcon: Icon(icon, color: AppColors.textDarkSecondary, size: 20),
         suffixIcon: suffix,
         filled: true,
-        fillColor: Colors.white.withOpacity(0.06),
+        fillColor: Colors.white.withValues(alpha: 0.06),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.white.withOpacity(0.1)),
+          borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.white.withOpacity(0.1)),
+          borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -365,9 +370,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           decoration: BoxDecoration(
-            color: AppColors.accent.withOpacity(0.08),
+            color: AppColors.accent.withValues(alpha: 0.08),
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: AppColors.accent.withOpacity(0.2)),
+            border: Border.all(color: AppColors.accent.withValues(alpha: 0.2)),
           ),
           child: Column(
             children: [

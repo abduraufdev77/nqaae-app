@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../features/auth/screens/login_screen.dart';
 import '../../features/auth/providers/auth_provider.dart';
 import '../../features/dashboard/screens/dashboard_screen.dart';
+import '../../features/universities/screens/university_detail_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authProvider);
@@ -28,6 +29,19 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/dashboard',
         name: 'dashboard',
         builder: (context, state) => const DashboardScreen(),
+      ),
+      GoRoute(
+        path: '/universities/:sourceId',
+        name: 'university-detail',
+        builder: (context, state) {
+          final sourceId = int.tryParse(state.pathParameters['sourceId'] ?? '');
+          if (sourceId == null) {
+            return const Scaffold(
+              body: Center(child: Text('Invalid university')),
+            );
+          }
+          return UniversityDetailScreen(sourceId: sourceId);
+        },
       ),
     ],
     errorBuilder: (context, state) =>
