@@ -40,7 +40,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   AuthNotifier() : super(const AuthState());
 
   Future<void> login(String email, String password) async {
-    state = state.copyWith(isLoading: true, error: null);
+    state = state.copyWith(isLoading: true, error: state.error);
 
     await Future.delayed(const Duration(seconds: 1)); // Simulate API call
 

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../../core/constants/app_colors.dart';
 import '../models/university.dart';
 import '../providers/university_providers.dart';
 import '../widgets/nqaae_ui.dart';
@@ -22,60 +23,63 @@ class UniversityDetailScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: NqaaeColors.page,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.white,
+        backgroundColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
         elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.white),
         title: Text(
           "Oliy ta'lim tashkilotlari",
-          style: GoogleFonts.inter(
+          style: GoogleFonts.openSans(
             color: NqaaeColors.text,
             fontWeight: FontWeight.w800,
             fontSize: 17,
           ),
         ),
       ),
-      body: detail.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stackTrace) => _StateMessage(
-          icon: Icons.cloud_off_rounded,
-          title: 'Backend data unavailable',
-          message: error.toString(),
-        ),
-        data: (university) => ListView(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 34),
-          children: [
-            _Breadcrumb(university: university),
-            const SizedBox(height: 16),
-            _UniversityHero(university: university),
-            const SizedBox(height: 18),
-            _SummaryBand(university: university),
-            const SizedBox(height: 22),
-            _SpecializationSection(university: university),
-            const SizedBox(height: 22),
-            _DirectionsSection(university: university),
-            const SizedBox(height: 22),
-            _EducationTypesSection(university: university),
-            const SizedBox(height: 22),
-            _StudentContingentSection(university: university),
-            const SizedBox(height: 22),
-            _StaffSection(university: university),
-            const SizedBox(height: 22),
-            _ScienceSection(university: university),
-            const SizedBox(height: 22),
-            _RatingHighlightSection(university: university),
-            const SizedBox(height: 22),
-            _SurveySection(university: university),
-            const SizedBox(height: 22),
-            _InternationalSection(university: university),
-            const SizedBox(height: 22),
-            _InfrastructureSection(university: university),
-            const SizedBox(height: 22),
-            _AccreditationSection(university: university),
-            const SizedBox(height: 22),
-            _NationalRatingSection(university: university),
-            const SizedBox(height: 22),
-            _ContactsSection(university: university),
-          ],
+      body: NqaaeBackground(
+        child: detail.when(
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (error, stackTrace) => _StateMessage(
+            icon: Icons.cloud_off_rounded,
+            title: 'Backend data unavailable',
+            message: error.toString(),
+          ),
+          data: (university) => ListView(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 34),
+            children: [
+              _Breadcrumb(university: university),
+              const SizedBox(height: 16),
+              _UniversityHero(university: university),
+              const SizedBox(height: 18),
+              _SummaryBand(university: university),
+              const SizedBox(height: 22),
+              _SpecializationSection(university: university),
+              const SizedBox(height: 22),
+              _DirectionsSection(university: university),
+              const SizedBox(height: 22),
+              _EducationTypesSection(university: university),
+              const SizedBox(height: 22),
+              _StudentContingentSection(university: university),
+              const SizedBox(height: 22),
+              _StaffSection(university: university),
+              const SizedBox(height: 22),
+              _ScienceSection(university: university),
+              const SizedBox(height: 22),
+              _RatingHighlightSection(university: university),
+              const SizedBox(height: 22),
+              _SurveySection(university: university),
+              const SizedBox(height: 22),
+              _InternationalSection(university: university),
+              const SizedBox(height: 22),
+              _InfrastructureSection(university: university),
+              const SizedBox(height: 22),
+              _AccreditationSection(university: university),
+              const SizedBox(height: 22),
+              _NationalRatingSection(university: university),
+              const SizedBox(height: 22),
+              _ContactsSection(university: university),
+            ],
+          ),
         ),
       ),
     );
@@ -94,7 +98,7 @@ class _Breadcrumb extends StatelessWidget {
       children: [
         Text(
           "Ochiq ma'lumotlar / Ta'lim tashkilotlari ro'yxati",
-          style: GoogleFonts.inter(
+          style: GoogleFonts.openSans(
             fontSize: 12,
             color: NqaaeColors.muted,
             fontWeight: FontWeight.w500,
@@ -103,7 +107,7 @@ class _Breadcrumb extends StatelessWidget {
         const SizedBox(height: 8),
         Text(
           university.name,
-          style: GoogleFonts.inter(
+          style: GoogleFonts.openSans(
             color: NqaaeColors.text,
             fontSize: 25,
             fontWeight: FontWeight.w900,
@@ -159,8 +163,8 @@ class _UniversityHero extends StatelessWidget {
           const SizedBox(height: 24),
           Text(
             university.name,
-            style: GoogleFonts.inter(
-              color: Colors.black,
+            style: GoogleFonts.openSans(
+              color: Colors.white,
               fontSize: 29,
               fontWeight: FontWeight.w900,
               height: 1.32,
@@ -226,8 +230,8 @@ class _HeroInfoRow extends StatelessWidget {
               children: [
                 Text(
                   label,
-                  style: GoogleFonts.inter(
-                    color: const Color(0xFF6D85AA),
+                  style: GoogleFonts.openSans(
+                    color: NqaaeColors.muted,
                     fontSize: 16,
                     fontWeight: FontWeight.w800,
                   ),
@@ -237,8 +241,8 @@ class _HeroInfoRow extends StatelessWidget {
                   value!.trim(),
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.inter(
-                    color: Colors.black,
+                  style: GoogleFonts.openSans(
+                    color: Colors.white,
                     fontSize: 19,
                     fontWeight: FontWeight.w800,
                     height: 1.15,
@@ -283,8 +287,9 @@ class _SummaryBand extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       decoration: BoxDecoration(
-        color: const Color(0xFFD8ECFF),
+        color: AppColors.primary.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(22),
+        border: Border.all(color: NqaaeColors.border),
       ),
       child: Column(
         children: [
@@ -317,7 +322,7 @@ class _SummaryItem extends StatelessWidget {
                 item.value!.trim(),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: GoogleFonts.inter(
+                style: GoogleFonts.openSans(
                   color: NqaaeColors.text,
                   fontSize: 24,
                   fontWeight: FontWeight.w900,
@@ -327,8 +332,8 @@ class _SummaryItem extends StatelessWidget {
                 item.label,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: GoogleFonts.inter(
-                  color: const Color(0xFF6D85AA),
+                style: GoogleFonts.openSans(
+                  color: NqaaeColors.muted,
                   fontSize: 17,
                   fontWeight: FontWeight.w800,
                 ),
@@ -411,8 +416,8 @@ class _DirectionsSection extends StatelessWidget {
               Expanded(
                 child: Text(
                   "Ta'lim yo'nalishlari tarkibi",
-                  style: GoogleFonts.inter(
-                    color: Colors.black,
+                  style: GoogleFonts.openSans(
+                    color: Colors.white,
                     fontSize: 22,
                     fontWeight: FontWeight.w900,
                   ),
@@ -515,7 +520,7 @@ class _StudentContingentSection extends StatelessWidget {
                         children: [
                           Text(
                             _formatNumber(total),
-                            style: GoogleFonts.inter(
+                            style: GoogleFonts.openSans(
                               color: NqaaeColors.blue,
                               fontSize: 26,
                               fontWeight: FontWeight.w900,
@@ -523,8 +528,8 @@ class _StudentContingentSection extends StatelessWidget {
                           ),
                           Text(
                             'Jami talabalar',
-                            style: GoogleFonts.inter(
-                              color: Colors.black,
+                            style: GoogleFonts.openSans(
+                              color: Colors.white,
                               fontSize: 20,
                               fontWeight: FontWeight.w900,
                             ),
@@ -579,8 +584,8 @@ class _StudentBar extends StatelessWidget {
               Expanded(
                 child: Text(
                   item.label,
-                  style: GoogleFonts.inter(
-                    color: const Color(0xFF4B5565),
+                  style: GoogleFonts.openSans(
+                    color: NqaaeColors.muted,
                     fontSize: 18,
                     fontWeight: FontWeight.w800,
                   ),
@@ -588,7 +593,7 @@ class _StudentBar extends StatelessWidget {
               ),
               Text(
                 '${_dash(item.value)} (${(percent * 100).round()}%)',
-                style: GoogleFonts.inter(
+                style: GoogleFonts.openSans(
                   color: percent > 0.35 ? NqaaeColors.teal : NqaaeColors.blue,
                   fontSize: 18,
                   fontWeight: FontWeight.w900,
@@ -602,7 +607,7 @@ class _StudentBar extends StatelessWidget {
             child: LinearProgressIndicator(
               value: percent.clamp(0, 1).toDouble(),
               minHeight: 38,
-              backgroundColor: const Color(0xFFD8ECFF),
+              backgroundColor: AppColors.primary.withValues(alpha: 0.12),
               valueColor: AlwaysStoppedAnimation<Color>(
                 percent > 0.35 ? NqaaeColors.teal : NqaaeColors.blue,
               ),
@@ -742,7 +747,7 @@ class _SurveySection extends StatelessWidget {
       children: [
         Text(
           "Umummilliy so'rovnoma\nnatijalari",
-          style: GoogleFonts.inter(
+          style: GoogleFonts.openSans(
             color: NqaaeColors.text,
             fontSize: 28,
             fontWeight: FontWeight.w900,
@@ -763,8 +768,8 @@ class _SurveySection extends StatelessWidget {
               children: [
                 Text(
                   '$year',
-                  style: GoogleFonts.inter(
-                    color: Colors.black,
+                  style: GoogleFonts.openSans(
+                    color: Colors.white,
                     fontSize: 22,
                     fontWeight: FontWeight.w800,
                   ),
@@ -808,7 +813,7 @@ class _SurveyTile extends StatelessWidget {
           childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
           title: Text(
             title,
-            style: GoogleFonts.inter(
+            style: GoogleFonts.openSans(
               color: NqaaeColors.text,
               fontSize: 24,
               fontWeight: FontWeight.w900,
@@ -818,7 +823,7 @@ class _SurveyTile extends StatelessWidget {
             width: 48,
             height: 48,
             decoration: BoxDecoration(
-              color: const Color(0xFFD8ECFF),
+              color: AppColors.primary.withValues(alpha: 0.16),
               borderRadius: BorderRadius.circular(12),
             ),
             child: const Icon(
@@ -850,8 +855,8 @@ class _SurveyQuestionCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 14),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: const Color(0xFFDDE6F0)),
+        color: Colors.white.withValues(alpha: 0.08),
+        border: Border.all(color: NqaaeColors.border),
         borderRadius: BorderRadius.circular(14),
       ),
       child: Column(
@@ -859,8 +864,8 @@ class _SurveyQuestionCard extends StatelessWidget {
         children: [
           Text(
             item.question,
-            style: GoogleFonts.inter(
-              color: const Color(0xFF333B4A),
+            style: GoogleFonts.openSans(
+              color: Colors.white,
               fontSize: 18,
               height: 1.18,
               fontWeight: FontWeight.w800,
@@ -956,8 +961,8 @@ class _SurveyPercentBox extends StatelessWidget {
           Expanded(
             child: Text(
               '${_formatPercent(percent)}\n$label',
-              style: GoogleFonts.inter(
-                color: const Color(0xFF333B4A),
+              style: GoogleFonts.openSans(
+                color: Colors.white,
                 fontSize: 19,
                 fontWeight: FontWeight.w900,
                 height: 1.1,
@@ -1091,7 +1096,7 @@ class _AccreditationSection extends StatelessWidget {
               children: [
                 Text(
                   'Kompleks davlat akkreditatsiya holati',
-                  style: GoogleFonts.inter(
+                  style: GoogleFonts.openSans(
                     color: NqaaeColors.text,
                     fontSize: 22,
                     fontWeight: FontWeight.w900,
@@ -1102,7 +1107,7 @@ class _AccreditationSection extends StatelessWidget {
                   width: double.infinity,
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFEAF7F7),
+                    color: AppColors.accent.withValues(alpha: 0.10),
                     border: Border.all(color: NqaaeColors.teal, width: 1.4),
                     borderRadius: BorderRadius.circular(14),
                   ),
@@ -1121,7 +1126,7 @@ class _AccreditationSection extends StatelessWidget {
                       const SizedBox(height: 28),
                       Text(
                         _dash(accreditation.status),
-                        style: GoogleFonts.inter(
+                        style: GoogleFonts.openSans(
                           color: NqaaeColors.teal,
                           fontSize: 26,
                           fontWeight: FontWeight.w900,
@@ -1176,7 +1181,7 @@ class _ProgramTableSection extends StatelessWidget {
         children: [
           Text(
             title,
-            style: GoogleFonts.inter(
+            style: GoogleFonts.openSans(
               color: NqaaeColors.text,
               fontSize: 22,
               fontWeight: FontWeight.w900,
@@ -1190,7 +1195,7 @@ class _ProgramTableSection extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               child: DataTable(
                 headingRowColor: WidgetStateProperty.all(
-                  const Color(0xFFD8ECFF),
+                  AppColors.primary.withValues(alpha: 0.16),
                 ),
                 dataRowMinHeight: 70,
                 dataRowMaxHeight: 96,
@@ -1348,7 +1353,7 @@ class _ContactCard extends StatelessWidget {
             height: 68,
             decoration: BoxDecoration(
               gradient: const LinearGradient(
-                colors: [Color(0xFFE8F4FF), Colors.white],
+                colors: [AppColors.primary, AppColors.accent],
               ),
               borderRadius: BorderRadius.circular(16),
             ),
@@ -1357,8 +1362,8 @@ class _ContactCard extends StatelessWidget {
           const SizedBox(height: 24),
           Text(
             item.label,
-            style: GoogleFonts.inter(
-              color: const Color(0xFF6D85AA),
+            style: GoogleFonts.openSans(
+              color: NqaaeColors.muted,
               fontSize: 18,
               fontWeight: FontWeight.w800,
             ),
@@ -1367,8 +1372,8 @@ class _ContactCard extends StatelessWidget {
           Text(
             item.value!.trim(),
             softWrap: true,
-            style: GoogleFonts.inter(
-              color: Colors.black,
+            style: GoogleFonts.openSans(
+              color: Colors.white,
               fontSize: 20,
               fontWeight: FontWeight.w800,
               height: 1.16,
@@ -1399,7 +1404,7 @@ class _SectionTitle extends StatelessWidget {
               Expanded(
                 child: Text(
                   title,
-                  style: GoogleFonts.inter(
+                  style: GoogleFonts.openSans(
                     color: NqaaeColors.text,
                     fontSize: 29,
                     height: 1.08,
@@ -1410,7 +1415,7 @@ class _SectionTitle extends StatelessWidget {
               if (showDate)
                 Text(
                   _sectionDate,
-                  style: GoogleFonts.inter(
+                  style: GoogleFonts.openSans(
                     color: NqaaeColors.blue,
                     fontSize: 22,
                     fontWeight: FontWeight.w800,
@@ -1437,23 +1442,7 @@ class _WhiteCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: padding,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: const Color(0xFFDDE6F0)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
-            blurRadius: 20,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
-      child: child,
-    );
+    return NqaaeSection(padding: padding, child: child);
   }
 }
 
@@ -1522,7 +1511,7 @@ class _GradientInfoBlock extends StatelessWidget {
                   children: [
                     Text(
                       label,
-                      style: GoogleFonts.inter(
+                      style: GoogleFonts.openSans(
                         color: Colors.white,
                         fontSize: large ? 22 : 17,
                         fontWeight: FontWeight.w800,
@@ -1532,7 +1521,7 @@ class _GradientInfoBlock extends StatelessWidget {
                     const SizedBox(height: 10),
                     Text(
                       value.trim(),
-                      style: GoogleFonts.inter(
+                      style: GoogleFonts.openSans(
                         color: Colors.white,
                         fontSize: large ? 32 : 24,
                         fontWeight: FontWeight.w900,
@@ -1569,8 +1558,9 @@ class _PlainMetricCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Colors.white.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: NqaaeColors.border),
       ),
       child: Row(
         children: [
@@ -1584,8 +1574,8 @@ class _PlainMetricCard extends StatelessWidget {
                   _dash(value),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.inter(
-                    color: Colors.black,
+                  style: GoogleFonts.openSans(
+                    color: Colors.white,
                     fontSize: 24,
                     fontWeight: FontWeight.w900,
                   ),
@@ -1595,8 +1585,8 @@ class _PlainMetricCard extends StatelessWidget {
                   label,
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.inter(
-                    color: const Color(0xFF5E6A7D),
+                  style: GoogleFonts.openSans(
+                    color: NqaaeColors.muted,
                     fontSize: 18,
                     height: 1.14,
                     fontWeight: FontWeight.w800,
@@ -1632,7 +1622,7 @@ class _TopBorderMetricCard extends StatelessWidget {
           margin: const EdgeInsets.only(top: 22),
           padding: const EdgeInsets.fromLTRB(18, 44, 18, 18),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Colors.white.withValues(alpha: 0.08),
             borderRadius: BorderRadius.circular(18),
             border: const Border(
               top: BorderSide(color: NqaaeColors.teal, width: 7),
@@ -1645,8 +1635,8 @@ class _TopBorderMetricCard extends StatelessWidget {
                 _dash(value),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: GoogleFonts.inter(
-                  color: Colors.black,
+                style: GoogleFonts.openSans(
+                  color: Colors.white,
                   fontSize: 26,
                   fontWeight: FontWeight.w900,
                 ),
@@ -1656,8 +1646,8 @@ class _TopBorderMetricCard extends StatelessWidget {
                 label,
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,
-                style: GoogleFonts.inter(
-                  color: const Color(0xFF6D85AA),
+                style: GoogleFonts.openSans(
+                  color: NqaaeColors.muted,
                   fontSize: 18,
                   fontWeight: FontWeight.w800,
                   height: 1.14,
@@ -1717,8 +1707,8 @@ class _SoftBlueMetricCard extends StatelessWidget {
                 children: [
                   Text(
                     _dash(value),
-                    style: GoogleFonts.inter(
-                      color: Colors.black,
+                    style: GoogleFonts.openSans(
+                      color: Colors.white,
                       fontSize: 26,
                       fontWeight: FontWeight.w900,
                     ),
@@ -1726,8 +1716,8 @@ class _SoftBlueMetricCard extends StatelessWidget {
                   const SizedBox(height: 10),
                   Text(
                     label,
-                    style: GoogleFonts.inter(
-                      color: Colors.black,
+                    style: GoogleFonts.openSans(
+                      color: Colors.white,
                       fontSize: 19,
                       height: 1.12,
                       fontWeight: FontWeight.w800,
@@ -1792,7 +1782,7 @@ class _TealTile extends StatelessWidget {
                 _dash(value),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: GoogleFonts.inter(
+                style: GoogleFonts.openSans(
                   color: Colors.white,
                   fontSize: 23,
                   fontWeight: FontWeight.w900,
@@ -1802,7 +1792,7 @@ class _TealTile extends StatelessWidget {
                 label,
                 maxLines: 4,
                 overflow: TextOverflow.ellipsis,
-                style: GoogleFonts.inter(
+                style: GoogleFonts.openSans(
                   color: Colors.white,
                   fontSize: 17,
                   height: 1.04,
@@ -1885,8 +1875,8 @@ class _AccreditationTab extends StatelessWidget {
       child: Text(
         text,
         textAlign: TextAlign.center,
-        style: GoogleFonts.inter(
-          color: selected ? NqaaeColors.text : const Color(0xFF596566),
+        style: GoogleFonts.openSans(
+          color: selected ? AppColors.darkBg : NqaaeColors.muted,
           fontSize: 18,
           fontWeight: FontWeight.w900,
         ),
@@ -1911,8 +1901,8 @@ class _AccreditationField extends StatelessWidget {
         children: [
           Text(
             label,
-            style: GoogleFonts.inter(
-              color: const Color(0xFF4B5565),
+            style: GoogleFonts.openSans(
+              color: NqaaeColors.muted,
               fontSize: 18,
               fontWeight: FontWeight.w800,
             ),
@@ -1920,8 +1910,8 @@ class _AccreditationField extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             value!,
-            style: GoogleFonts.inter(
-              color: Colors.black,
+            style: GoogleFonts.openSans(
+              color: Colors.white,
               fontSize: 20,
               fontWeight: FontWeight.w800,
             ),
@@ -1952,7 +1942,7 @@ class _StaticRatingMini extends StatelessWidget {
         children: [
           Text(
             label,
-            style: GoogleFonts.inter(
+            style: GoogleFonts.openSans(
               color: Colors.white,
               fontSize: 22,
               fontWeight: FontWeight.w800,
@@ -1961,7 +1951,7 @@ class _StaticRatingMini extends StatelessWidget {
           const SizedBox(height: 10),
           Text(
             value,
-            style: GoogleFonts.inter(
+            style: GoogleFonts.openSans(
               color: Colors.white,
               fontSize: 30,
               fontWeight: FontWeight.w900,
@@ -2009,8 +1999,8 @@ class _DonutChart extends StatelessWidget {
                         children: [
                           Text(
                             direction.name,
-                            style: GoogleFonts.inter(
-                              color: Colors.black,
+                            style: GoogleFonts.openSans(
+                              color: Colors.white,
                               fontSize: 19,
                               fontWeight: FontWeight.w800,
                             ),
@@ -2018,8 +2008,8 @@ class _DonutChart extends StatelessWidget {
                           const SizedBox(height: 8),
                           Text(
                             '${direction.percent!.round()}%',
-                            style: GoogleFonts.inter(
-                              color: const Color(0xFF4B5565),
+                            style: GoogleFonts.openSans(
+                              color: NqaaeColors.muted,
                               fontSize: 27,
                               fontWeight: FontWeight.w900,
                             ),
@@ -2209,7 +2199,7 @@ class _AreaChartPainter extends CustomPainter {
     final painter = TextPainter(
       text: TextSpan(
         text: text,
-        style: GoogleFonts.inter(
+        style: GoogleFonts.openSans(
           color: color,
           fontSize: fontSize,
           fontWeight: weight,
@@ -2314,7 +2304,7 @@ class _StateMessage extends StatelessWidget {
               const SizedBox(height: 12),
               Text(
                 title,
-                style: GoogleFonts.inter(
+                style: GoogleFonts.openSans(
                   color: NqaaeColors.text,
                   fontWeight: FontWeight.w800,
                 ),
@@ -2323,7 +2313,7 @@ class _StateMessage extends StatelessWidget {
               Text(
                 message,
                 textAlign: TextAlign.center,
-                style: GoogleFonts.inter(
+                style: GoogleFonts.openSans(
                   color: NqaaeColors.muted,
                   fontSize: 12,
                 ),

@@ -14,7 +14,7 @@ class AppTheme {
         surface: AppColors.darkSurface,
         error: AppColors.error,
       ),
-      textTheme: GoogleFonts.interTextTheme(
+      textTheme: GoogleFonts.openSansTextTheme(
         const TextTheme(
           displayLarge: TextStyle(
             color: AppColors.textDark,
@@ -75,7 +75,7 @@ class AppTheme {
         surface: AppColors.lightSurface,
         error: AppColors.error,
       ),
-      textTheme: GoogleFonts.interTextTheme(
+      textTheme: GoogleFonts.openSansTextTheme(
         const TextTheme(
           displayLarge: TextStyle(
             color: AppColors.textLight,

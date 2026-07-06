@@ -5,23 +5,43 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../core/config/api_config.dart';
+import '../../../core/constants/app_colors.dart';
+import '../../../shared/widgets/glass_card.dart';
 
 class NqaaeColors {
-  static const page = Color(0xFFF4F5F5);
-  static const text = Color(0xFF061422);
-  static const muted = Color(0xFF778191);
-  static const border = Color(0xFFEAEFF5);
-  static const field = Color(0xFFF5F7FA);
-  static const teal = Color(0xFF3C878C);
-  static const blue = Color(0xFF3E7BB6);
-  static const green = Color(0xFF19AE8B);
-  static const gold = Color(0xFFD3BF64);
+  static const page = AppColors.darkBg;
+  static const text = AppColors.textDark;
+  static const muted = AppColors.textDarkSecondary;
+  static const border = AppColors.glassBorderDark;
+  static const field = Color(0x242D86CA);
+  static const teal = AppColors.accent;
+  static const blue = AppColors.primary;
+  static const green = AppColors.accent;
+  static const gold = Color(0xFFF2C85B);
+  static const card = AppColors.glassDark;
 
   static const gradient = LinearGradient(
-    begin: Alignment.centerRight,
-    end: Alignment.centerLeft,
-    colors: [green, Color(0xFF23939F), blue],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [blue, Color(0xFF257FAF), green],
   );
+}
+
+class NqaaeBackground extends StatelessWidget {
+  const NqaaeBackground({super.key, required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: const BoxDecoration(gradient: AppColors.darkGradient),
+      child: DecoratedBox(
+        decoration: BoxDecoration(gradient: AppColors.darkGradient),
+        child: child,
+      ),
+    );
+  }
 }
 
 class NqaaeSection extends StatelessWidget {
@@ -38,21 +58,13 @@ class NqaaeSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: margin,
+    return GlassCard(
+      borderRadius: const BorderRadius.all(Radius.circular(18)),
+      blurStrength: 16,
+      backgroundColor: AppColors.glassDark,
       padding: padding,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: NqaaeColors.border),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.025),
-            blurRadius: 18,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
+      borderWidth: 1,
+      margin: margin,
       child: child,
     );
   }
@@ -73,7 +85,7 @@ class NqaaeSectionHeader extends StatelessWidget {
           Expanded(
             child: Text(
               title,
-              style: GoogleFonts.inter(
+              style: GoogleFonts.openSans(
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
                 color: NqaaeColors.text,
@@ -83,7 +95,7 @@ class NqaaeSectionHeader extends StatelessWidget {
           if (trailing != null)
             Text(
               trailing!,
-              style: GoogleFonts.inter(
+              style: GoogleFonts.openSans(
                 fontSize: 12,
                 color: NqaaeColors.muted,
                 fontWeight: FontWeight.w500,
@@ -125,12 +137,13 @@ class NqaaePill extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: const Color(0xFFEDF4F4),
+        color: AppColors.accent.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: AppColors.accent.withValues(alpha: 0.26)),
       ),
       child: Text(
         text,
-        style: GoogleFonts.inter(
+        style: GoogleFonts.openSans(
           fontSize: 12,
           color: NqaaeColors.teal,
           fontWeight: FontWeight.w600,
@@ -161,7 +174,7 @@ class NqaaeLogo extends StatelessWidget {
       height: size,
       padding: EdgeInsets.all(size * 0.1),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Colors.white.withValues(alpha: 0.08),
         border: Border.all(color: NqaaeColors.border),
         borderRadius: BorderRadius.circular(size * 0.2),
       ),
@@ -201,7 +214,7 @@ class _FallbackLogo extends StatelessWidget {
     return Center(
       child: Text(
         firstLetter,
-        style: GoogleFonts.inter(
+        style: GoogleFonts.openSans(
           color: NqaaeColors.teal,
           fontWeight: FontWeight.w800,
         ),
