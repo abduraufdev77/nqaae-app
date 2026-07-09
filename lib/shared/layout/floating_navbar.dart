@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 
-import '../../../core/constants/app_colors.dart';
+import '../../core/constants/app_colors.dart';
+import '../widgets/cupertino_liquid_pressable.dart';
 
 class FloatingNavBarItem {
   const FloatingNavBarItem({required this.icon, required this.label});
@@ -39,13 +40,13 @@ class FloatingNavBar extends StatefulWidget {
 
 class _FloatingNavBarState extends State<FloatingNavBar>
     with SingleTickerProviderStateMixin {
-  static const double _navWidth = 282;
+  static const double _navWidth = 272;
   static const double _navHeight = 74;
 
-  static const double _horizontalPadding = 9;
+  static const double _horizontalPadding = 7;
   static const double _verticalPadding = 8;
 
-  static const double _bubbleSize = 58;
+  static const double _bubbleSize = 56;
   static const Duration _animationDuration = Duration(milliseconds: 430);
 
   late final AnimationController _controller;
@@ -210,25 +211,25 @@ class _FloatingNavBarState extends State<FloatingNavBar>
     final safeCurrentIndex = _clampIndex(widget.currentIndex);
 
     return SafeArea(
-      minimum: const EdgeInsets.only(left: 18, right: 18, bottom: 10),
+      minimum: const EdgeInsets.only(left: 14, right: 14, bottom: 6),
       child: Center(
         child: ClipRRect(
           borderRadius: BorderRadius.circular(40),
           child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 7, sigmaY: 8),
+            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
             child: Container(
               width: _navWidth,
               height: _navHeight,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(40),
-                color: const Color.fromARGB(255, 187, 187, 187).withValues(alpha: 0.18),
+                color: Colors.white.withValues(alpha: 0.12),
                 border: Border.all(
-                  color: Colors.white.withValues(alpha: 0.15),
-                  width: 0.85,
+                  color: Colors.white.withValues(alpha: 0.12),
+                  width: 0.8,
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.25),
+                    color: Colors.black.withValues(alpha: 0.12),
                     blurRadius: 24,
                     offset: const Offset(0, 10),
                   ),
@@ -448,12 +449,12 @@ class _FloatingNavBarButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final iconColor = Color.lerp(
-      Colors.white.withValues(alpha: 0.66),
+      Colors.white.withValues(alpha: 0.72),
       Colors.white,
       selectedAmount,
     )!;
 
-    final scale = lerpDouble(1.0, 1.13, selectedAmount)!;
+    final selectedScale = lerpDouble(1.0, 1.13, selectedAmount)!;
     final yOffset = lerpDouble(0, -1.5, selectedAmount)!;
 
     return Tooltip(
@@ -462,14 +463,15 @@ class _FloatingNavBarButton extends StatelessWidget {
         button: true,
         selected: selected,
         label: item.label,
-        child: GestureDetector(
-          behavior: HitTestBehavior.opaque,
+        child: CupertinoLiquidPressable(
           onTap: onTap,
+          scale: 0.94,
+          enableHaptics: false,
           child: Center(
             child: Transform.translate(
               offset: Offset(0, yOffset),
               child: Transform.scale(
-                scale: scale,
+                scale: selectedScale,
                 child: Icon(item.icon, color: iconColor, size: 26),
               ),
             ),

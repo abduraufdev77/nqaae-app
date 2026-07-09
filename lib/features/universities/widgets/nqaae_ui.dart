@@ -172,11 +172,11 @@ class NqaaeLogo extends StatelessWidget {
     return Container(
       width: size,
       height: size,
-      padding: EdgeInsets.all(size * 0.1),
+      clipBehavior: Clip.antiAlias,
+      padding: EdgeInsets.all(size * 0.15),
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.08),
-        border: Border.all(color: NqaaeColors.border),
-        borderRadius: BorderRadius.circular(size * 0.2),
+        borderRadius: BorderRadius.circular(size * 0.18),
       ),
       child: !hasLogo
           ? _FallbackLogo(fallback: fallback)
@@ -184,7 +184,15 @@ class NqaaeLogo extends StatelessWidget {
               future: _loadLogo(sourceId),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  return Image.memory(snapshot.data!, fit: BoxFit.contain);
+                  return Center(
+                    child: Image.memory(
+                      snapshot.data!,
+                      // fit: BoxFit.cover,
+                      alignment: Alignment.center,
+                      width: size,
+                      height: size,
+                    ),
+                  );
                 }
                 return _FallbackLogo(fallback: fallback);
               },

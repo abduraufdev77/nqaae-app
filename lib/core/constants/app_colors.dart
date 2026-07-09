@@ -3,14 +3,47 @@ import 'package:flutter/material.dart';
 class AppColors {
   // Primary brand colors
   static const Color primary = Color(0xFF2D86CA);
-  static const Color primaryLight = Color(0xFF63B6F2);
+  static const Color primaryLight = Color(0xFF4AA9F2);
   static const Color primaryDark = Color(0xFF145C95);
   static const Color accent = Color(0xFF39A38D);
   static const Color accentDark = Color(0xFF167463);
-  static const LinearGradient gradient = LinearGradient(
+  static const Color teal = Color(0xFF05B2B8);
+
+  // gradients
+
+  static LinearGradient gradient({GradientStyle style = GradientStyle.linear}) {
+    switch (style) {
+      case GradientStyle.linear:
+        return const LinearGradient(
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+          colors: [primary, accent],
+        );
+      case GradientStyle.diagonal:
+        return const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [primary, accent],
+        );
+    }
+  }
+
+  static const LinearGradient blueGradient = LinearGradient(
     begin: Alignment.centerLeft,
     end: Alignment.centerRight,
-    colors: [primary, accent],
+    colors: [primary, primaryLight],
+  );
+
+  static const LinearGradient accentGradient = LinearGradient(
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+    colors: [accent, teal],
+  );
+
+  static const LinearGradient darkGradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [Color(0xFF0A1735), Color(0xFF064644)],
   );
 
   // Dark theme backgrounds
@@ -19,12 +52,6 @@ class AppColors {
   static const Color darkCard = Color(0x661B3A45);
   static const Color darkBorder = Color(0x4039A38D);
 
-  static const LinearGradient darkGradient = LinearGradient(
-    begin: Alignment.topCenter,
-    end: Alignment.bottomCenter,
-    colors: [Color(0xFF0A1735), Color(0xFF064644)],
-  );
-
   // Light theme backgrounds
   static const Color lightBg = Color(0xFF071822);
   static const Color lightSurface = Color(0xFF0B2631);
@@ -32,14 +59,14 @@ class AppColors {
   static const Color lightBorder = Color(0x3339A38D);
 
   // Glass effect
-  static const Color glassDark = Color(0x1FFFFFFF);
+  static const Color glassDark = Color(0x12FFFFFF);
   static const Color glassLight = Color(0x1FFFFFFF);
-  static const Color glassBorderDark = Color(0x33FFFFFF);
+  static const Color glassBorderDark = Color(0x33FAFAFA);
   static const Color glassBorderLight = Color(0x33FFFFFF);
 
   // Dashboard
-  static const Color dashboardPanel = Color(0xFF172641);
-  static const Color dashboardSearch = Color(0xFF24324E);
+  static const Color dashboardPanel = Color(0x0FFFFFFF);
+  static const Color dashboardSearch = Color(0x17FFFFFF);
   static const Color dashboardSectionCard = Color(0x0FFFFFFF);
   static const Color dashboardChip = Color(0xFF26364E);
   static const Color dashboardChipSelected = accent;
@@ -62,9 +89,11 @@ class AppColors {
   static const List<Color> chartColors = [
     primary,
     accent,
-    Color(0xFFF59E0B),
+    teal,
     Color(0xFFEF4444),
     Color(0xFF63B6F2),
     Color(0xFF86DBC9),
   ];
 }
+
+enum GradientStyle { linear, diagonal }

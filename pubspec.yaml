@@ -24,6 +24,7 @@ dependencies:
   flutter_svg: ^2.0.10+1
   iconsax_flutter: ^1.0.1
   shimmer: ^3.0.0
+  cupertino_icons: ^1.0.0
 
   # Localization
   easy_localization: ^3.0.7
@@ -47,3 +48,6 @@ flutter:
     - assets/translations/
     - assets/images/
     - assets/icons/
+    - assets/icons/auth/
+    - assets/data/
+    - assets/data/survey/

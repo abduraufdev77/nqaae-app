@@ -1,0 +1,68 @@
+{
+  "title": "Professorlar va o‘qituvchilar",
+  "questions": [
+    {
+      "question": "Oliy ta’lim tashkilotida ta’lim berish uchun yaratilgan shart-sharoitlar umumiy jihatdan quyidagi javob variantlaridan qaysi biriga mos keladi?",
+      "positive_label": "Ijobiy",
+      "positive_percent": 92.5,
+      "negative_label": "Salbiy",
+      "negative_percent": 7.5
+    },
+    {
+      "question": "Oliy ta’lim tashkilotida malaka oshirish va kasbiy rivojlanish uchun yaratilgan sharoitlarni qanday baholaysiz?",
+      "positive_label": "Ijobiy",
+      "positive_percent": 92.5,
+      "negative_label": "Salbiy",
+      "negative_percent": 7.5
+    },
+    {
+      "question": "Oliy ta’lim tashkilotida o‘quv jarayonlarini boshqarish samaradorligini qanday baholaysiz?",
+      "positive_label": "Ijobiy",
+      "positive_percent": 92.5,
+      "negative_label": "Salbiy",
+      "negative_percent": 7.5
+    },
+    {
+      "question": "Oliy ta’lim tashkilotida ta’lim berish uchun yaratilgan shart-sharoitlar umumiy jihatdan quyidagi javob variantlaridan qaysi biriga mos keladi?",
+      "positive_label": "Ijobiy",
+      "positive_percent": 92.5,
+      "negative_label": "Salbiy",
+      "negative_percent": 7.5
+    },
+    {
+      "question": "Oliy ta’lim tashkilotida malaka oshirish va kasbiy rivojlanish uchun yaratilgan sharoitlarni qanday baholaysiz?",
+      "positive_label": "Ijobiy",
+      "positive_percent": 92.5,
+      "negative_label": "Salbiy",
+      "negative_percent": 7.5
+    },
+    {
+      "question": "Oliy ta’lim tashkilotida o‘quv jarayonlarini boshqarish samaradorligini qanday baholaysiz?",
+      "positive_label": "Ijobiy",
+      "positive_percent": 92.5,
+      "negative_label": "Salbiy",
+      "negative_percent": 7.5
+    },
+    {
+      "question": "Oliy ta’lim tashkilotida ta’lim berish uchun yaratilgan shart-sharoitlar umumiy jihatdan quyidagi javob variantlaridan qaysi biriga mos keladi?",
+      "positive_label": "Ijobiy",
+      "positive_percent": 92.5,
+      "negative_label": "Salbiy",
+      "negative_percent": 7.5
+    },
+    {
+      "question": "Oliy ta’lim tashkilotida malaka oshirish va kasbiy rivojlanish uchun yaratilgan sharoitlarni qanday baholaysiz?",
+      "positive_label": "Ijobiy",
+      "positive_percent": 92.5,
+      "negative_label": "Salbiy",
+      "negative_percent": 7.5
+    },
+    {
+      "question": "Oliy ta’lim tashkilotida o‘quv jarayonlarini boshqarish samaradorligini qanday baholaysiz?",
+      "positive_label": "Ijobiy",
+      "positive_percent": 92.5,
+      "negative_label": "Salbiy",
+      "negative_percent": 7.5
+    }
+  ]
+}

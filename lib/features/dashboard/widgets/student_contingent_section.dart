@@ -1,278 +1,358 @@
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:nqaae_app/shared/widgets/metric_tile.dart';
 
 import '../../../core/constants/app_colors.dart';
+import '../../../shared/widgets/card.dart';
 import 'dashboard_section_card.dart';
 
-class StudentContingentSection extends StatelessWidget {
-  const StudentContingentSection({super.key});
-
-  static const _segments = [
-    _StudentSegment('Bakalavr', '11 504', AppColors.primaryLight, 0.92),
-    _StudentSegment('Magistratura', '467', Color(0xFF18E5E7), 0.037),
-    _StudentSegment('Doktorantura', '539', Color(0xFF25BD94), 0.043),
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Expanded(
-              child: Text(
-                'Key metrics',
-                style: GoogleFonts.openSans(
-                  color: Colors.white,
-                  fontSize: 19,
-                  fontWeight: FontWeight.w900,
-                ),
-              ),
-            ),
-            TextButton(
-              onPressed: () {},
-              style: TextButton.styleFrom(
-                foregroundColor: Colors.white,
-                minimumSize: const Size(72, 34),
-                padding: EdgeInsets.zero,
-              ),
-              child: Text(
-                'Export',
-                style: GoogleFonts.openSans(
-                  color: Colors.white,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 12),
-        DashboardSectionCard(
-          padding: const EdgeInsets.fromLTRB(18, 20, 18, 22),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      'Student contingent',
-                      style: GoogleFonts.openSans(
-                        color: Colors.white,
-                        fontSize: 17,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: 34,
-                    height: 34,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.10),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Iconsax.arrow_right_3,
-                      color: Colors.white.withValues(alpha: 0.52),
-                      size: 20,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 14),
-              Center(
-                child: SizedBox(
-                  width: 180,
-                  height: 180,
-                  child: CustomPaint(
-                    painter: _StudentDonutPainter(_segments),
-                    child: Center(
-                      child: Text(
-                        '12 510',
-                        style: GoogleFonts.openSans(
-                          color: Colors.white,
-                          fontSize: 30,
-                          fontWeight: FontWeight.w900,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              for (final segment in _segments) ...[
-                _StudentLegendRow(segment: segment),
-                if (segment != _segments.last) const SizedBox(height: 13),
-              ],
-            ],
-          ),
-        ),
-        const SizedBox(height: 14),
-        const Row(
-          children: [
-            Expanded(
-              child: _DashboardMetricTile(
-                icon: Iconsax.people,
-                value: '229',
-                label: 'Professors and teachers',
-              ),
-            ),
-            SizedBox(width: 13),
-            Expanded(
-              child: _DashboardMetricTile(
-                icon: Iconsax.chart_2,
-                value: '36',
-                label: 'National ranking position',
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
-class _StudentLegendRow extends StatelessWidget {
-  const _StudentLegendRow({required this.segment});
-
-  final _StudentSegment segment;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Container(
-          width: 11,
-          height: 11,
-          decoration: BoxDecoration(
-            color: segment.color,
-            shape: BoxShape.circle,
-          ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Text(
-            segment.label,
-            style: GoogleFonts.openSans(
-              color: Colors.white.withValues(alpha: 0.82),
-              fontSize: 16,
-              fontWeight: FontWeight.w800,
-            ),
-          ),
-        ),
-        Text(
-          segment.value,
-          style: GoogleFonts.openSans(
-            color: Colors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.w900,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _DashboardMetricTile extends StatelessWidget {
-  const _DashboardMetricTile({
-    required this.icon,
+class StudentContingentMetric {
+  const StudentContingentMetric({
     required this.value,
     required this.label,
+    this.assetName,
+    this.gradient,
+    this.badge,
+    this.badgeVariant = DashboardMetricTileBadgeVariant.solid,
+    this.badgeColor = const Color(0xFF5D9EFF),
+    this.badgeGradient,
   });
 
-  final IconData icon;
   final String value;
   final String label;
+  final String? assetName;
+  final Gradient? gradient;
+  final String? badge;
+  final DashboardMetricTileBadgeVariant badgeVariant;
+  final Color badgeColor;
+  final Gradient? badgeGradient;
+}
+
+class StudentContingentSection extends StatelessWidget {
+  const StudentContingentSection({
+    super.key,
+    this.title = 'Talabalar kontigenti',
+    this.date = '01.07.2026',
+    this.cardTitle = 'Jami talabalar',
+    this.total = '11 971',
+    this.bachelor = '11 504',
+    this.master = '467',
+    this.onTap,
+  });
+
+  final String title;
+  final String date;
+  final String cardTitle;
+  final String total;
+  final String bachelor;
+  final String master;
+  final VoidCallback? onTap;
+
+  static const _masterGradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [Color(0xFF18B8C2), Color.fromRGBO(5, 178, 184, 1)],
+  );
+
+  static const _highBadgeGradient = LinearGradient(
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+    colors: [Color(0xFF2961BD), Color(0xFF659CEE)],
+  );
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 112,
-      padding: const EdgeInsets.fromLTRB(18, 16, 14, 14),
-      decoration: BoxDecoration(
-        color: AppColors.dashboardMetricTile,
-        borderRadius: BorderRadius.circular(14),
+    final primaryMetrics = [
+      StudentContingentMetric(
+        value: bachelor,
+        label: 'Bachelor',
+        assetName: 'assets/icons/bachelor.svg',
+        gradient: AppColors.gradient(style: GradientStyle.linear),
       ),
+      StudentContingentMetric(
+        value: master,
+        label: 'Master',
+        assetName: 'assets/icons/master.svg',
+        gradient: _masterGradient,
+      ),
+    ];
+
+    const compactMetrics = [
+      StudentContingentMetric(value: '2 455', label: 'Qabul qilinganlar'),
+      StudentContingentMetric(value: '756', label: 'Tamomlash darajasi'),
+      StudentContingentMetric(value: '565', label: 'Bitiruvchilar soni'),
+      StudentContingentMetric(
+        value: '756',
+        label: 'Bitiruvchilar bandlik darajasi',
+        badge: 'High',
+        badgeVariant: DashboardMetricTileBadgeVariant.gradient,
+        badgeGradient: _highBadgeGradient,
+      ),
+    ];
+
+    return DashboardSectionCard(
+      title: title,
+      date: date,
+      cardTitle: cardTitle,
+      showButton: true,
+      onTap: onTap,
+      sectionGap: 18,
+      contentGap: 10,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: AppColors.dashboardMutedIcon, size: 30),
-          const Spacer(),
           Text(
-            value,
-            style: GoogleFonts.openSans(
-              color: Colors.white,
+            total,
+            style: DashboardTextStyles.text(
               fontSize: 28,
-              fontWeight: FontWeight.w900,
+              weight: FontWeight.w800,
               height: 1,
             ),
           ),
-          const SizedBox(height: 5),
-          Text(
-            label,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: GoogleFonts.openSans(
-              color: Colors.white,
-              fontSize: 13,
-              fontWeight: FontWeight.w700,
-              height: 1,
-            ),
+
+          const SizedBox(height: 20),
+
+          const _ContingentRatioBar(),
+
+          const SizedBox(height: 10),
+
+          _MetricPairRow(
+            gap: 10,
+            children: [
+              for (final metric in primaryMetrics)
+                DashboardMetricTile(
+                  value: metric.value,
+                  label: metric.label,
+                  assetName: metric.assetName,
+                  iconPosition: DashboardMetricTileIconPosition.topRight,
+                  iconSize: 32,
+                  iconColor: Colors.white.withValues(alpha: 0.4),
+                  variant: DashboardCardVariant.gradient,
+                  gradient: metric.gradient,
+                  height: 84,
+                  borderRadius: const BorderRadius.all(Radius.circular(18)),
+                  padding: const EdgeInsets.fromLTRB(12, 12, 12, 11),
+                  valueFontSize: 22,
+                  valueWeight: FontWeight.w900,
+                  labelFontSize: 13,
+                  labelWeight: FontWeight.w800,
+                  labelMaxLines: 1,
+                  reservedTrailingWidth: 0,
+                ),
+            ],
           ),
+
+          const SizedBox(height: 10),
+
+          _MetricGrid(
+            items: compactMetrics,
+            gap: 10,
+            itemBuilder: (metric) {
+              return DashboardMetricTile(
+                value: metric.value,
+                label: metric.label,
+                badge: metric.badge,
+                badgeVariant: metric.badgeVariant,
+                badgeColor: metric.badgeColor,
+                badgeGradient: metric.badgeGradient,
+                variant: DashboardCardVariant.solid,
+                color: Colors.white.withValues(alpha: 0.055),
+                height: 78,
+                borderRadius: const BorderRadius.all(Radius.circular(18)),
+                padding: const EdgeInsets.fromLTRB(12, 12, 12, 10),
+                labelMaxLines: 2,
+                reservedTrailingWidth: 0,
+              );
+            },
+          ),
+
+          const SizedBox(height: 10),
+
+          const _GraduateQualityBanner(),
         ],
       ),
     );
   }
 }
 
-class _StudentDonutPainter extends CustomPainter {
-  const _StudentDonutPainter(this.segments);
+class _MetricPairRow extends StatelessWidget {
+  const _MetricPairRow({required this.children, this.gap = 10});
 
-  final List<_StudentSegment> segments;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final strokeWidth = size.width * 0.15;
-    final rect = Offset.zero & size;
-    final arcRect = rect.deflate(strokeWidth / 2);
-    final paint = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round
-      ..strokeWidth = strokeWidth;
-
-    var start = -math.pi * 1.36;
-    const gap = 0.12;
-
-    for (final segment in segments) {
-      final sweep = (math.pi * 2 * segment.ratio) - gap;
-      paint.color = segment.color;
-      canvas.drawArc(
-        arcRect,
-        start,
-        sweep.clamp(0.08, math.pi * 2).toDouble(),
-        false,
-        paint,
-      );
-      start += sweep + gap;
-    }
-  }
+  final List<Widget> children;
+  final double gap;
 
   @override
-  bool shouldRepaint(covariant _StudentDonutPainter oldDelegate) {
-    return oldDelegate.segments != segments;
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        for (var index = 0; index < children.length; index++) ...[
+          Expanded(child: children[index]),
+          if (index != children.length - 1) SizedBox(width: gap),
+        ],
+      ],
+    );
   }
 }
 
-class _StudentSegment {
-  const _StudentSegment(this.label, this.value, this.color, this.ratio);
+class _MetricGrid extends StatelessWidget {
+  const _MetricGrid({
+    required this.items,
+    required this.itemBuilder,
+    this.gap = 10,
+  });
 
-  final String label;
-  final String value;
-  final Color color;
-  final double ratio;
+  final List<StudentContingentMetric> items;
+  final Widget Function(StudentContingentMetric metric) itemBuilder;
+  final double gap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        for (var rowIndex = 0; rowIndex < items.length; rowIndex += 2) ...[
+          _MetricPairRow(
+            gap: gap,
+            children: [
+              itemBuilder(items[rowIndex]),
+              if (rowIndex + 1 < items.length) itemBuilder(items[rowIndex + 1]),
+            ],
+          ),
+          if (rowIndex + 2 < items.length) SizedBox(height: gap),
+        ],
+      ],
+    );
+  }
+}
+
+class _ContingentRatioBar extends StatelessWidget {
+  const _ContingentRatioBar();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Text(
+              '96%',
+              style: DashboardTextStyles.text(
+                fontSize: 13,
+                weight: FontWeight.w900,
+                height: 1,
+              ),
+            ),
+            const Spacer(),
+            Text(
+              '4%',
+              style: DashboardTextStyles.text(
+                fontSize: 13,
+                weight: FontWeight.w900,
+                height: 1,
+              ),
+            ),
+          ],
+        ),
+
+        const SizedBox(height: 10),
+
+        ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: SizedBox(
+            height: 28,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.055),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 96,
+                    child: Container(
+                      margin: const EdgeInsets.fromLTRB(5, 5, 3, 5),
+                      decoration: BoxDecoration(
+                        color: AppColors.primaryLight,
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 4,
+                    child: Container(
+                      margin: const EdgeInsets.fromLTRB(3, 5, 5, 5),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF18B8C2),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _GraduateQualityBanner extends StatelessWidget {
+  const _GraduateQualityBanner();
+
+  @override
+  Widget build(BuildContext context) {
+    return DashboardCard(
+      variant: DashboardCardVariant.gradient,
+      height: 96,
+      padding: const EdgeInsets.fromLTRB(14, 14, 0, 0),
+      borderRadius: const BorderRadius.all(Radius.circular(18)),
+      gradient: const LinearGradient(
+        begin: Alignment.centerLeft,
+        end: Alignment.centerRight,
+        colors: [AppColors.primary, Color(0xFF35B8A4)],
+      ),
+      child: Stack(
+        clipBehavior: Clip.hardEdge,
+        children: [
+          Positioned(
+            right: 0,
+            bottom: 0,
+            child: Image.asset(
+              'assets/images/graduates.png',
+              key: const ValueKey('student-contingent-graduates'),
+              width: 136,
+              fit: BoxFit.contain,
+            ),
+          ),
+
+          Positioned.fill(
+            right: 118,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  '565',
+                  style: DashboardTextStyles.text(
+                    fontSize: 20,
+                    weight: FontWeight.w900,
+                    height: 1,
+                  ),
+                ),
+                const SizedBox(height: 7),
+                Text(
+                  'Bitiruvchilar sifat indeksi',
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: DashboardTextStyles.text(
+                    fontSize: 13,
+                    weight: FontWeight.w700,
+                    height: 1.08,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }

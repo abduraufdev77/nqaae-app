@@ -20,14 +20,14 @@ class GlassCard extends StatelessWidget {
     required this.child,
     this.width,
     this.height,
-    this.padding = const EdgeInsets.all(16),
+    this.padding = const EdgeInsets.all(14),
     this.margin,
     this.borderRadius = const BorderRadius.all(Radius.circular(20)),
-    this.blurStrength = 10,
+    this.blurStrength = 12,
     this.borderColor,
     this.backgroundColor,
     this.borderGradient,
-    this.borderWidth = 0.7,
+    this.borderWidth = 0.9,
   });
 
   @override
@@ -35,16 +35,30 @@ class GlassCard extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     final radius = borderRadius;
+
+    // CRITICAL FIX: Calculate the nested inner radius to stop background bleeding
+    final innerRadius = BorderRadius.only(
+      topLeft: Radius.circular(
+        (radius.topLeft.x - borderWidth).clamp(0, double.infinity),
+      ),
+      topRight: Radius.circular(
+        (radius.topRight.x - borderWidth).clamp(0, double.infinity),
+      ),
+      bottomLeft: Radius.circular(
+        (radius.bottomLeft.x - borderWidth).clamp(0, double.infinity),
+      ),
+      bottomRight: Radius.circular(
+        (radius.bottomRight.x - borderWidth).clamp(0, double.infinity),
+      ),
+    );
+
     final strokeGradient =
         borderGradient ??
         LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            AppColors.primary.withValues(alpha: 0.52),
-            Colors.white.withValues(alpha: 0.12),
-            AppColors.accent.withValues(alpha: 0.46),
-          ],
+          colors: [const Color(0xFFFFFFFF), const Color(0x009999FF)],
+          stops: [0.0, 0.0],
         );
 
     return Container(
@@ -52,9 +66,9 @@ class GlassCard extends StatelessWidget {
       height: height,
       margin: margin,
       decoration: BoxDecoration(gradient: strokeGradient, borderRadius: radius),
-      padding: EdgeInsets.all(borderWidth),
+      padding: EdgeInsets.all(borderWidth), // Outer stroke width simulator
       child: ClipRRect(
-        borderRadius: radius,
+        borderRadius: innerRadius, // Uses adjusted inner corner bounds
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: blurStrength, sigmaY: blurStrength),
           child: Container(
@@ -62,7 +76,7 @@ class GlassCard extends StatelessWidget {
               color:
                   backgroundColor ??
                   (isDark ? AppColors.glassDark : AppColors.glassLight),
-              borderRadius: radius,
+              borderRadius: innerRadius,
               border: borderColor == null
                   ? null
                   : Border.all(color: borderColor!, width: borderWidth),

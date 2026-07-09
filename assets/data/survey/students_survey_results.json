@@ -1,0 +1,69 @@
+{
+  "title": "Talabalar",
+  "questions": [
+    {
+      "question": "Oliy ta’lim tashkilotida ta’lim olish uchun yaratilgan shart-sharoitlarni qanday baholaysiz?",
+      "positive_label": "Ijobiy",
+      "positive_percent": 88.4,
+      "negative_label": "Salbiy",
+      "negative_percent": 11.6
+    },
+    {
+      "question": "O‘quv jarayoni sifati va dars mashg‘ulotlaridan qoniqish darajangiz qanday?",
+      "positive_label": "Ijobiy",
+      "positive_percent": 91.2,
+      "negative_label": "Salbiy",
+      "negative_percent": 8.8
+    },
+    {
+      "question": "Talabalar uchun axborot-resurs markazi, elektron platformalar va qo‘shimcha xizmatlar qulayligini qanday baholaysiz?",
+      "positive_label": "Ijobiy",
+      "positive_percent": 84.7,
+      "negative_label": "Salbiy",
+      "negative_percent": 15.3
+    },
+    {
+      "question": "Oliy ta’lim tashkilotida ta’lim olish uchun yaratilgan shart-sharoitlarni qanday baholaysiz?",
+      "positive_label": "Ijobiy",
+      "positive_percent": 88.4,
+      "negative_label": "Salbiy",
+      "negative_percent": 11.6
+    },
+    {
+      "question": "O‘quv jarayoni sifati va dars mashg‘ulotlaridan qoniqish darajangiz qanday?",
+      "positive_label": "Ijobiy",
+      "positive_percent": 91.2,
+      "negative_label": "Salbiy",
+      "negative_percent": 8.8
+    },
+    {
+      "question": "Talabalar uchun axborot-resurs markazi, elektron platformalar va qo‘shimcha xizmatlar qulayligini qanday baholaysiz?",
+      "positive_label": "Ijobiy",
+      "positive_percent": 84.7,
+      "negative_label": "Salbiy",
+      "negative_percent": 15.3
+    },
+    {
+      "question": "Oliy ta’lim tashkilotida ta’lim olish uchun yaratilgan shart-sharoitlarni qanday baholaysiz?",
+      "positive_label": "Ijobiy",
+      "positive_percent": 88.4,
+      "negative_label": "Salbiy",
+      "negative_percent": 11.6
+    },
+    {
+      "question": "O‘quv jarayoni sifati va dars mashg‘ulotlaridan qoniqish darajangiz qanday?",
+      "positive_label": "Ijobiy",
+      "positive_percent": 91.2,
+      "negative_label": "Salbiy",
+      "negative_percent": 8.8
+    },
+    {
+      "question": "Talabalar uchun axborot-resurs markazi, elektron platformalar va qo‘shimcha xizmatlar qulayligini qanday baholaysiz?",
+      "positive_label": "Ijobiy",
+      "positive_percent": 84.7,
+      "negative_label": "Salbiy",
+      "negative_percent": 15.3
+    }
+  ]
+}
+

@@ -4,7 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../features/auth/screens/login_screen.dart';
 import '../../features/auth/providers/auth_provider.dart';
 import '../../features/dashboard/screens/dashboard_screen.dart';
-import '../../features/universities/screens/university_detail_screen.dart';
+import '../../features/profile/screens/profile_screen.dart';
+import '../../features/settings/screens/settings_detail_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authProvider);
@@ -31,17 +32,38 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const DashboardScreen(),
       ),
       GoRoute(
-        path: '/universities/:sourceId',
-        name: 'university-detail',
-        builder: (context, state) {
-          final sourceId = int.tryParse(state.pathParameters['sourceId'] ?? '');
-          if (sourceId == null) {
-            return const Scaffold(
-              body: Center(child: Text('Invalid university')),
-            );
-          }
-          return UniversityDetailScreen(sourceId: sourceId);
-        },
+        path: '/profile',
+        name: 'profile',
+        builder: (context, state) => const ProfileScreen(),
+      ),
+      GoRoute(
+        path: '/settings/general',
+        name: 'settings-general',
+        builder: (context, state) =>
+            const SettingsDetailScreen(title: 'General settings'),
+      ),
+      GoRoute(
+        path: '/settings/contact',
+        name: 'settings-contact',
+        builder: (context, state) =>
+            const SettingsDetailScreen(title: 'My Contact'),
+      ),
+      GoRoute(
+        path: '/settings/faq',
+        name: 'settings-faq',
+        builder: (context, state) => const SettingsDetailScreen(title: 'FAQ'),
+      ),
+      GoRoute(
+        path: '/settings/terms',
+        name: 'settings-terms',
+        builder: (context, state) =>
+            const SettingsDetailScreen(title: 'Terms of service'),
+      ),
+      GoRoute(
+        path: '/settings/policy',
+        name: 'settings-policy',
+        builder: (context, state) =>
+            const SettingsDetailScreen(title: 'User policy'),
       ),
     ],
     errorBuilder: (context, state) =>
