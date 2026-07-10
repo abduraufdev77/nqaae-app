@@ -20,15 +20,12 @@ class _ControlledUniversityRepository extends UniversityRepository {
   _ControlledUniversityRepository({
     this.cachedList,
     this.cachedDetail,
-    Future<UniversityListResponse>? listRefresh,
-    Future<University>? detailRefresh,
-  }) : _listRefresh = listRefresh,
-       _detailRefresh = detailRefresh;
+    this.detailRefresh,
+  });
 
   final CachedUniversityValue<UniversityListResponse>? cachedList;
   final CachedUniversityValue<University>? cachedDetail;
-  final Future<UniversityListResponse>? _listRefresh;
-  final Future<University>? _detailRefresh;
+  final Future<University>? detailRefresh;
   int listFetches = 0;
   int detailFetches = 0;
 
@@ -56,13 +53,13 @@ class _ControlledUniversityRepository extends UniversityRepository {
     int pageSize = 20,
   }) {
     listFetches++;
-    return _listRefresh ?? Future.value(_response('Network list', page: page));
+    return Future.value(_response('Network list', page: page));
   }
 
   @override
   Future<University> fetchUniversity(int sourceId) {
     detailFetches++;
-    return _detailRefresh ??
+    return detailRefresh ??
         Future.value(University(sourceId: sourceId, name: 'Network detail'));
   }
 }
