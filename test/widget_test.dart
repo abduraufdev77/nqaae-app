@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -35,6 +36,7 @@ import 'package:nqaae_app/features/universities/models/university.dart';
 import 'package:nqaae_app/features/universities/providers/university_providers.dart';
 import 'package:nqaae_app/features/universities/repositories/university_repository.dart';
 import 'package:nqaae_app/features/universities/widgets/nqaae_ui.dart';
+import 'package:nqaae_app/features/universities/widgets/university_logo_image.dart';
 import 'package:nqaae_app/features/universities/widgets/university_item_card.dart';
 import 'package:nqaae_app/shared/widgets/glass_button.dart';
 import 'package:nqaae_app/shared/widgets/modal_sheet.dart';
@@ -508,6 +510,27 @@ void main() {
     expect(arrow.borderGradient, _glassButtonBorderGradient);
     expect(arrow.borderWidth, _glassButtonBorderWidth);
     expect(arrow.blurStrength, _glassButtonBlurStrength);
+  });
+
+  testWidgets('NqaaeLogo uses the shared persistent image cache', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: NqaaeLogo(
+          sourceId: 42,
+          hasLogo: true,
+          fallback: 'Cached university',
+        ),
+      ),
+    );
+
+    final image = tester.widget<CachedNetworkImage>(
+      find.byType(CachedNetworkImage),
+    );
+    expect(image.cacheManager, same(universityLogoCacheManager));
+    expect(image.imageUrl, '${ApiConfig.baseUrl}/api/universities/42/logo');
+    expect(find.byType(FutureBuilder), findsNothing);
   });
 
   testWidgets(

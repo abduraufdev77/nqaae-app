@@ -1,12 +1,10 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart' as http;
 
 import '../../../core/config/api_config.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../shared/widgets/glass_card.dart';
+import 'university_logo_image.dart';
 
 class NqaaeColors {
   static const page = AppColors.darkBg;
@@ -180,34 +178,13 @@ class NqaaeLogo extends StatelessWidget {
       ),
       child: !hasLogo
           ? _FallbackLogo(fallback: fallback)
-          : FutureBuilder<Uint8List>(
-              future: _loadLogo(sourceId),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return Center(
-                    child: Image.memory(
-                      snapshot.data!,
-                      // fit: BoxFit.cover,
-                      alignment: Alignment.center,
-                      width: size,
-                      height: size,
-                    ),
-                  );
-                }
-                return _FallbackLogo(fallback: fallback);
-              },
+          : UniversityLogoImage(
+              imageUrl: '${ApiConfig.baseUrl}/api/universities/$sourceId/logo',
+              fallback: _FallbackLogo(fallback: fallback),
+              width: size,
+              height: size,
             ),
     );
-  }
-
-  static Future<Uint8List> _loadLogo(int sourceId) async {
-    final response = await http.get(
-      Uri.parse('${ApiConfig.baseUrl}/api/universities/$sourceId/logo'),
-    );
-    if (response.statusCode != 200) {
-      throw StateError('Logo unavailable');
-    }
-    return response.bodyBytes;
   }
 }
 

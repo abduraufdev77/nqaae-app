@@ -22,6 +22,7 @@ import '../../universities/providers/university_providers.dart';
 import '../../universities/models/university.dart';
 import '../../universities/widgets/nqaae_ui.dart';
 import '../../universities/widgets/university_item_card.dart';
+import '../../universities/widgets/university_logo_image.dart';
 import '../../settings/screens/settings_screen.dart';
 import '../widgets/institute_summary_card.dart';
 import '../widgets/professors_composition_section.dart';
@@ -241,15 +242,16 @@ class _DashboardHomeTab extends StatelessWidget {
               borderRadius: BorderRadius.circular(99),
             ),
             child: ClipRRect(
+              key: const ValueKey('dashboard-header-logo-clip'),
               borderRadius: BorderRadius.circular(99),
               child: selectedDetail?.logoUrl != null
-                  ? Image.network(
-                      selectedDetail!.logoUrl!,
-                      fit: BoxFit.contain,
-                      errorBuilder: (_, _, _) => Image.asset(
+                  ? UniversityLogoImage(
+                      imageUrl: selectedDetail!.logoUrl!,
+                      fallback: Image.asset(
                         'assets/images/university-logo.png',
                         fit: BoxFit.contain,
                       ),
+                      fit: BoxFit.contain,
                     )
                   : Image.asset(
                       'assets/images/university-logo.png',
