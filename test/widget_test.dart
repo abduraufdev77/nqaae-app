@@ -47,6 +47,23 @@ const _glassButtonBlurStrength = 8.0;
 
 class _FakeUniversityRepository extends UniversityRepository {
   @override
+  Future<CachedUniversityValue<UniversityListResponse>?>
+  readCachedUniversities({
+    String? search,
+    int page = 1,
+    int pageSize = 20,
+  }) async {
+    return null;
+  }
+
+  @override
+  Future<CachedUniversityValue<University>?> readCachedUniversity(
+    int sourceId,
+  ) async {
+    return null;
+  }
+
+  @override
   Future<UniversityListResponse> fetchUniversities({
     String? search,
     int page = 1,
@@ -83,6 +100,24 @@ class _FakeUniversityRepository extends UniversityRepository {
           value: '4242',
         ),
       ],
+    );
+  }
+}
+
+class _CountingUniversityRepository extends _FakeUniversityRepository {
+  int listFetches = 0;
+
+  @override
+  Future<UniversityListResponse> fetchUniversities({
+    String? search,
+    int page = 1,
+    int pageSize = 20,
+  }) {
+    listFetches++;
+    return super.fetchUniversities(
+      search: search,
+      page: page,
+      pageSize: pageSize,
     );
   }
 }
@@ -324,6 +359,30 @@ void main() {
           .offset,
       Offset.zero,
     );
+  });
+
+  testWidgets('University navigation reuses the loaded list', (tester) async {
+    final repository = _CountingUniversityRepository();
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [universityRepositoryProvider.overrideWithValue(repository)],
+        child: const MaterialApp(home: DashboardScreen()),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(repository.listFetches, 1);
+
+    await tester.tap(find.byTooltip('Universitetlar'));
+    await tester.pumpAndSettle();
+    expect(find.text('Toshkent davlat texnika universiteti'), findsOneWidget);
+
+    await tester.tap(find.byKey(const ValueKey('universities-header-back')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('Universitetlar'));
+    await tester.pumpAndSettle();
+
+    expect(repository.listFetches, 1);
+    expect(find.text('Toshkent davlat texnika universiteti'), findsOneWidget);
   });
 
   testWidgets('Universities search expands while focused', (

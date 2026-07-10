@@ -80,7 +80,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
     if (_selectedTabIndex != index) {
       _searchDebounce?.cancel();
       _searchController.clear();
-      if (_selectedTabIndex == 1) {
+      if (_selectedTabIndex == 1 &&
+          ref.read(universityListControllerProvider).search.isNotEmpty) {
         ref.read(universityListControllerProvider.notifier).refresh(search: '');
       }
     }
