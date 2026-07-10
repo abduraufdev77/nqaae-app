@@ -36,7 +36,7 @@ class InstituteSummaryCard extends StatelessWidget {
       icon: Iconsax.teacher,
     ),
     InstituteInfoItem(
-      value: 'KARAKALPAKSTAN REPUBLIC',
+      value: 'Navoiy shahar',
       label: 'Hudud',
       icon: Iconsax.location,
     ),

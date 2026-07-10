@@ -449,7 +449,7 @@ class UniversityDashboardContent extends StatelessWidget {
 
   void _add(List<Widget> sections, Widget section) {
     sections
-      ..add(const SizedBox(height: 56))
+      ..add(const SizedBox(height: 48))
       ..add(section);
   }
 

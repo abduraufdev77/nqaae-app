@@ -293,7 +293,7 @@ class _DashboardHomeTab extends StatelessWidget {
               left: AppDesign.screenHorizontalPadding,
               right: AppDesign.screenHorizontalPadding,
               top: 24,
-              bottom: 136,
+              bottom: 130,
               child: UniversityDashboardContent(university: university),
             ),
             loading: () => const SliverFillRemaining(
@@ -316,7 +316,7 @@ class _DashboardHomeTab extends StatelessWidget {
             left: AppDesign.screenHorizontalPadding,
             right: AppDesign.screenHorizontalPadding,
             top: AppDesign.sectionTopGap,
-            bottom: 136,
+            bottom: 130,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

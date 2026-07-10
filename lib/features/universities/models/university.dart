@@ -200,13 +200,19 @@ bool isDisplayableSourceValue(String? value) {
 
 class EducationDirection {
   final String name;
+  final int? value;
   final double? percent;
 
-  const EducationDirection({required this.name, this.percent});
+  const EducationDirection({
+    required this.name,
+    this.value,
+    this.percent,
+  });
 
   factory EducationDirection.fromJson(Map<String, dynamic> json) {
     return EducationDirection(
       name: json['name'] as String? ?? '',
+      value: (json['value'] as num?)?.toInt(),
       percent: (json['percent'] as num?)?.toDouble(),
     );
   }
