@@ -8,10 +8,14 @@ class ProfileAvatar extends StatelessWidget {
     super.key,
     this.size = 96,
     this.showCameraButton = false,
+    this.image,
+    this.onCameraPressed,
   });
 
   final double size;
   final bool showCameraButton;
+  final ImageProvider? image;
+  final VoidCallback? onCameraPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -30,8 +34,9 @@ class ProfileAvatar extends StatelessWidget {
             height: size,
             clipBehavior: Clip.antiAlias,
             decoration: const BoxDecoration(shape: BoxShape.circle),
-            child: Image.asset(
-              'assets/images/profile-avatar.png',
+            child: Image(
+              image:
+                  image ?? const AssetImage('assets/images/profile-avatar.png'),
               fit: BoxFit.cover,
             ),
           ),
@@ -39,18 +44,22 @@ class ProfileAvatar extends StatelessWidget {
             Positioned(
               right: 0,
               bottom: size * 0.05,
-              child: Container(
+              child: InkResponse(
                 key: const ValueKey('profile-camera-button'),
-                width: cameraSize,
-                height: cameraSize,
-                decoration: const BoxDecoration(
-                  color: AppColors.accent,
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Iconsax.camera,
-                  color: Colors.white,
-                  size: 25,
+                onTap: onCameraPressed,
+                radius: cameraSize / 2,
+                child: Container(
+                  width: cameraSize,
+                  height: cameraSize,
+                  decoration: const BoxDecoration(
+                    color: AppColors.accent,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Iconsax.camera,
+                    color: Colors.white,
+                    size: 25,
+                  ),
                 ),
               ),
             ),

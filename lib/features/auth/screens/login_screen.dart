@@ -9,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 
 import '../../../core/constants/app_colors.dart';
+import '../../../shared/widgets/app_cupertino_theme.dart';
 import '../providers/auth_provider.dart';
 
 enum _AuthLanguage {
@@ -70,51 +71,46 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final picked = await showCupertinoModalPopup<_AuthLanguage>(
       context: context,
       builder: (context) {
-        return CupertinoActionSheet(
-          title: Text(
-            'Choose language',
-            style: GoogleFonts.alexandria(
-              fontSize: 15,
-              fontWeight: FontWeight.w700,
+        return AppCupertinoTheme(
+          child: CupertinoActionSheet(
+            title: Text(
+              'Choose language',
+              style: AppCupertinoTheme.titleTextStyle(),
             ),
-          ),
-          actions: [
-            for (final language in _AuthLanguage.values)
-              CupertinoActionSheetAction(
-                isDefaultAction: language == _selectedLanguage,
-                onPressed: () => Navigator.of(context).pop(language),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(language.flag, style: const TextStyle(fontSize: 20)),
-                    const SizedBox(width: 8),
-                    Text(
-                      language.title,
-                      style: GoogleFonts.alexandria(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700,
+            actions: [
+              for (final language in _AuthLanguage.values)
+                CupertinoActionSheetAction(
+                  isDefaultAction: language == _selectedLanguage,
+                  onPressed: () => Navigator.of(context).pop(language),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        language.flag,
+                        style: const TextStyle(
+                          fontSize: AppCupertinoTheme.flagFontSize,
+                        ),
                       ),
-                    ),
-                    if (language == _selectedLanguage) ...[
-                      const SizedBox(width: 10),
-                      const Icon(
-                        CupertinoIcons.check_mark,
-                        size: 15,
-                        color: CupertinoColors.activeBlue,
+                      const SizedBox(width: 8),
+                      Text(
+                        language.title,
+                        style: AppCupertinoTheme.actionTextStyle(),
                       ),
+                      if (language == _selectedLanguage) ...[
+                        const SizedBox(width: 10),
+                        const Icon(
+                          CupertinoIcons.check_mark,
+                          size: 15,
+                          color: CupertinoColors.activeBlue,
+                        ),
+                      ],
                     ],
-                  ],
+                  ),
                 ),
-              ),
-          ],
-          cancelButton: CupertinoActionSheetAction(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text(
-              'Cancel',
-              style: GoogleFonts.alexandria(
-                fontSize: 15,
-                fontWeight: FontWeight.w700,
-              ),
+            ],
+            cancelButton: CupertinoActionSheetAction(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('Cancel', style: AppCupertinoTheme.cancelTextStyle()),
             ),
           ),
         );

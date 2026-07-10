@@ -9,6 +9,7 @@ import '../../../shared/widgets/app_header_controls.dart';
 import '../../../shared/widgets/app_screen_header.dart';
 import '../../../shared/widgets/app_silver_box.dart';
 import '../../../shared/widgets/glass_card.dart';
+import '../../../shared/widgets/app_cupertino_theme.dart';
 import '../../profile/widgets/profile_avatar.dart';
 
 enum _SettingsLanguage {
@@ -128,43 +129,38 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return showCupertinoModalPopup<_SettingsLanguage>(
       context: context,
       builder: (context) {
-        return CupertinoActionSheet(
-          title: Text(
-            'Choose language',
-            style: GoogleFonts.openSans(
-              fontSize: 15,
-              fontWeight: FontWeight.w800,
+        return AppCupertinoTheme(
+          child: CupertinoActionSheet(
+            title: Text(
+              'Choose language',
+              style: AppCupertinoTheme.titleTextStyle(),
             ),
-          ),
-          actions: [
-            for (final language in _SettingsLanguage.values)
-              CupertinoActionSheetAction(
-                isDefaultAction: language == _language,
-                onPressed: () => Navigator.of(context).pop(language),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(language.flag, style: const TextStyle(fontSize: 22)),
-                    const SizedBox(width: 10),
-                    Text(
-                      language.title,
-                      style: GoogleFonts.openSans(
-                        fontSize: 17,
-                        fontWeight: FontWeight.w700,
+            actions: [
+              for (final language in _SettingsLanguage.values)
+                CupertinoActionSheetAction(
+                  isDefaultAction: language == _language,
+                  onPressed: () => Navigator.of(context).pop(language),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        language.flag,
+                        style: const TextStyle(
+                          fontSize: AppCupertinoTheme.flagFontSize,
+                        ),
                       ),
-                    ),
-                  ],
+                      const SizedBox(width: 10),
+                      Text(
+                        language.title,
+                        style: AppCupertinoTheme.actionTextStyle(),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-          ],
-          cancelButton: CupertinoActionSheetAction(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text(
-              'Cancel',
-              style: GoogleFonts.openSans(
-                fontSize: 17,
-                fontWeight: FontWeight.w700,
-              ),
+            ],
+            cancelButton: CupertinoActionSheetAction(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('Cancel', style: AppCupertinoTheme.cancelTextStyle()),
             ),
           ),
         );
@@ -246,41 +242,33 @@ class _SettingsScreenState extends State<SettingsScreen> {
       final shouldLogout = await showCupertinoModalPopup<bool>(
         context: context,
         builder: (context) {
-          return CupertinoActionSheet(
-            title: Text(
-              'Log out?',
-              style: GoogleFonts.openSans(
-                fontSize: 15,
-                fontWeight: FontWeight.w800,
+          return AppCupertinoTheme(
+            child: CupertinoActionSheet(
+              title: Text(
+                'Log out?',
+                style: AppCupertinoTheme.titleTextStyle(),
               ),
-            ),
-            message: Text(
-              'Are you sure you want to log out?',
-              style: GoogleFonts.openSans(
-                fontSize: 13,
-                fontWeight: FontWeight.w500,
+              message: Text(
+                'Are you sure you want to log out?',
+                style: AppCupertinoTheme.messageTextStyle(),
               ),
-            ),
-            actions: [
-              CupertinoActionSheetAction(
-                isDestructiveAction: true,
-                onPressed: () => Navigator.of(context).pop(true),
-                child: Text(
-                  'Log Out',
-                  style: GoogleFonts.openSans(
-                    fontSize: 17,
-                    fontWeight: FontWeight.w700,
+              actions: [
+                CupertinoActionSheetAction(
+                  isDestructiveAction: true,
+                  onPressed: () => Navigator.of(context).pop(true),
+                  child: Text(
+                    'Log Out',
+                    style: AppCupertinoTheme.actionTextStyle(
+                      color: CupertinoColors.systemRed,
+                    ),
                   ),
                 ),
-              ),
-            ],
-            cancelButton: CupertinoActionSheetAction(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: Text(
-                'Cancel',
-                style: GoogleFonts.openSans(
-                  fontSize: 17,
-                  fontWeight: FontWeight.w700,
+              ],
+              cancelButton: CupertinoActionSheetAction(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: Text(
+                  'Cancel',
+                  style: AppCupertinoTheme.cancelTextStyle(),
                 ),
               ),
             ),
@@ -301,7 +289,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(false),
-              child: const Text('Cancel'),
+              child: const Text(
+                'Cancel',
+                style: TextStyle(color: AppColors.error),
+              ),
             ),
             TextButton(
               onPressed: () => Navigator.of(context).pop(true),

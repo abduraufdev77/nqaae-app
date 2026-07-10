@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nqaae_app/main.dart';
+import 'package:nqaae_app/core/config/api_config.dart';
 import 'package:nqaae_app/core/constants/app_colors.dart';
 import 'package:nqaae_app/core/constants/app_design.dart';
 import 'package:nqaae_app/core/theme/app_theme.dart';
@@ -10,13 +12,16 @@ import 'package:nqaae_app/features/auth/screens/login_screen.dart';
 import 'package:nqaae_app/features/dashboard/screens/dashboard_screen.dart';
 import 'package:nqaae_app/features/dashboard/widgets/charts/rounded_pie_chart.dart';
 import 'package:nqaae_app/features/dashboard/widgets/institute_summary_card.dart';
+import 'package:nqaae_app/features/dashboard/widgets/accreditation_section.dart';
 import 'package:nqaae_app/features/dashboard/widgets/professors_composition_section.dart';
 import 'package:nqaae_app/features/dashboard/widgets/scientific_potential_section.dart';
 import 'package:nqaae_app/features/dashboard/widgets/sheets/survey_results_sheet.dart';
+import 'package:nqaae_app/features/dashboard/widgets/survey_results_section.dart';
 import 'package:nqaae_app/features/dashboard/widgets/specialization_section.dart';
 import 'package:nqaae_app/features/dashboard/widgets/student_contingent_section.dart';
 import 'package:nqaae_app/features/dashboard/widgets/total_students_section.dart';
 import 'package:nqaae_app/features/dashboard/widgets/types_of_education_section.dart';
+import 'package:nqaae_app/features/dashboard/widgets/university_dashboard_content.dart';
 import 'package:nqaae_app/shared/layout/floating_navbar.dart';
 import 'package:nqaae_app/shared/widgets/app_header_controls.dart';
 import 'package:nqaae_app/shared/widgets/app_silver_box.dart';
@@ -33,6 +38,7 @@ import 'package:nqaae_app/features/universities/widgets/nqaae_ui.dart';
 import 'package:nqaae_app/features/universities/widgets/university_item_card.dart';
 import 'package:nqaae_app/shared/widgets/glass_button.dart';
 import 'package:nqaae_app/shared/widgets/modal_sheet.dart';
+import 'package:nqaae_app/shared/widgets/app_cupertino_theme.dart';
 
 const _glassButtonBackground = Color(0x0C000000);
 const _glassButtonBorderGradient = AppDesign.verticalBorderGradient;
@@ -66,9 +72,17 @@ class _FakeUniversityRepository extends UniversityRepository {
   Future<University> fetchUniversity(int sourceId) async {
     return University(
       sourceId: sourceId,
-      name: 'Toshkent davlat texnika universiteti',
+      name: 'Selected university $sourceId',
       region: 'Toshkent shahri',
       ownership: 'Davlat',
+      foundedYear: 1955,
+      metrics: const [
+        UniversityMetric(
+          section: 'summary',
+          key: 'Jami talabalar',
+          value: '4242',
+        ),
+      ],
     );
   }
 }
@@ -88,6 +102,10 @@ void main() {
       AppTheme.lightTheme.textTheme.bodyMedium?.fontFamily,
       startsWith('OpenSans'),
     );
+  });
+
+  test('API defaults to the device-reachable LAN backend', () {
+    expect(ApiConfig.baseUrl, 'http://172.16.16.70:8000');
   });
 
   test('Glass border colors stay low-opacity white', () {
@@ -189,11 +207,91 @@ void main() {
       findsOneWidget,
     );
 
+    final universitySearchField = find.descendant(
+      of: find.byKey(const ValueKey('universities-search-shell')),
+      matching: find.byType(TextField),
+    );
+    await tester.enterText(universitySearchField, 'Toshkent');
+    await tester.pump(const Duration(milliseconds: 400));
+
     await tester.tap(find.text("Toshkent davlat texnika universiteti"));
     await tester.pumpAndSettle();
 
     expect(find.text('DASHBOARD'), findsOneWidget);
     expect(find.text('UNIVERSITIES'), findsNothing);
+    expect(find.text('Selected university 1'), findsOneWidget);
+    expect(find.text('4242'), findsWidgets);
+    expect(
+      find.byKey(const ValueKey('selected-university-dashboard')),
+      findsOneWidget,
+    );
+    expect(
+      find.byKey(const ValueKey('dashboard-header-logo-clip')),
+      findsOneWidget,
+    );
+    expect(
+      tester.widget<TextField>(find.byType(TextField)).controller?.text,
+      '',
+    );
+  });
+
+  testWidgets('Selected dashboard keeps every canonical metric visible', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(
+          body: SingleChildScrollView(
+            child: UniversityDashboardContent(
+              university: University(
+                sourceId: 404,
+                name: 'Empty university',
+                accreditations: [
+                  Accreditation(
+                    accreditationType: 'complex',
+                    status: "Akkreditatsiyadan o'tgan",
+                    isCompleted: true,
+                    certificateNumber: 'OT №123',
+                    issuedDate: '01.01.2024',
+                    expiresDate: '01.01.2029',
+                    certificateUrl: 'https://nqaae.uz/certificate.pdf',
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    final specializationTiles = tester
+        .widgetList<SpecializationTile>(find.byType(SpecializationTile))
+        .toList();
+    expect(specializationTiles, hasLength(2));
+    expect(specializationTiles[0].item.color, AppColors.accent);
+    expect(specializationTiles[1].item.color, AppColors.primary);
+
+    final education = tester.widget<TypesOfEducationSection>(
+      find.byType(TypesOfEducationSection),
+    );
+    expect(education.items, hasLength(5));
+    expect(education.items.map((item) => item.value), everyElement('0'));
+
+    final science = tester.widget<ScientificPotentialSection>(
+      find.byType(ScientificPotentialSection),
+    );
+    expect(science.metrics, hasLength(6));
+    expect(science.rankings, hasLength(7));
+    expect(science.rankings.map((item) => item.value), everyElement('0'));
+
+    final surveys = tester.widget<SurveyResultsSection>(
+      find.byType(SurveyResultsSection),
+    );
+    expect(surveys.items, hasLength(2));
+    expect(surveys.items.map((item) => item.data), everyElement(isNotNull));
+
+    expect(find.byType(AccreditationSection), findsOneWidget);
+    expect(find.text('Sertifikat raqami:'), findsWidgets);
   });
 
   testWidgets('Universities header back button returns to dashboard tab', (
@@ -1089,15 +1187,154 @@ void main() {
     expect(find.text('Full name', skipOffstage: false), findsOneWidget);
     expect(find.text('Your Name', skipOffstage: false), findsOneWidget);
     expect(find.text('Phone number', skipOffstage: false), findsOneWidget);
-    expect(find.text('903279787', skipOffstage: false), findsOneWidget);
+    expect(find.text('+998 90 327 97 87', skipOffstage: false), findsOneWidget);
     expect(find.text('Email', skipOffstage: false), findsOneWidget);
     expect(
       find.text('youremail@email.com', skipOffstage: false),
       findsOneWidget,
     );
     expect(find.text('Username', skipOffstage: false), findsOneWidget);
-    expect(find.text('Su', skipOffstage: false), findsOneWidget);
-    expect(find.text('Save Changes', skipOffstage: false), findsOneWidget);
+    expect(find.text('@yourname', skipOffstage: false), findsOneWidget);
+    expect(find.text('Save Changes', skipOffstage: false), findsNothing);
+  });
+
+  testWidgets('Profile screen edits a value inline and saves the draft', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: ThemeData.dark().copyWith(platform: TargetPlatform.iOS),
+        home: const ProfileScreen(),
+      ),
+    );
+
+    expect(find.byKey(const ValueKey('profile-save-button')), findsNothing);
+
+    await tester.tap(find.byKey(const ValueKey('profile-value-full-name')));
+    await tester.pump();
+    await tester.enterText(
+      find.byKey(const ValueKey('profile-editor-full-name')),
+      'Jaloliddin Ozodov',
+    );
+    await tester.pump();
+
+    expect(find.byKey(const ValueKey('profile-save-button')), findsOneWidget);
+
+    await tester.testTextInput.receiveAction(TextInputAction.done);
+    await tester.pump();
+
+    expect(find.text('Jaloliddin Ozodov'), findsOneWidget);
+
+    await tester.tap(find.byKey(const ValueKey('profile-save-button')));
+    await tester.pump(const Duration(milliseconds: 350));
+
+    expect(find.byKey(const ValueKey('profile-save-button')), findsNothing);
+    expect(find.byType(SnackBar), findsNothing);
+    expect(find.byKey(const ValueKey('app-top-toast')), findsOneWidget);
+    expect(find.byType(CupertinoPopupSurface), findsOneWidget);
+    expect(find.text('Changes saved'), findsOneWidget);
+    final toastDecoration =
+        tester
+                .widget<DecoratedBox>(
+                  find.byKey(const ValueKey('app-toast-glass-surface')),
+                )
+                .decoration
+            as BoxDecoration;
+    expect(
+      (toastDecoration.border! as Border).top.color.a,
+      lessThanOrEqualTo(0.18),
+    );
+    expect(toastDecoration.color, isNull);
+    expect(toastDecoration.gradient, isA<LinearGradient>());
+    expect(
+      tester.widget<Text>(find.text('Changes saved')).style?.decoration,
+      TextDecoration.none,
+    );
+
+    await tester.pump(const Duration(seconds: 3));
+  });
+
+  testWidgets('Profile camera opens a themed iOS source action sheet', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: AppTheme.darkTheme,
+        home: Theme(
+          data: AppTheme.darkTheme.copyWith(platform: TargetPlatform.iOS),
+          child: const ProfileScreen(),
+        ),
+      ),
+    );
+
+    await tester.tap(find.byKey(const ValueKey('profile-camera-button')));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Take Photo'), findsOneWidget);
+    expect(find.text('Choose from Library'), findsOneWidget);
+    expect(
+      tester.widget<Text>(find.text('Take Photo')).style?.fontSize,
+      AppCupertinoTheme.actionFontSize,
+    );
+    expect(
+      tester.widget<Text>(find.text('Cancel')).style?.color,
+      AppColors.error,
+    );
+    expect(
+      CupertinoTheme.of(tester.element(find.text('Take Photo'))).primaryColor,
+      AppTheme.darkTheme.colorScheme.primary,
+    );
+    expect(
+      CupertinoTheme.of(tester.element(find.text('Take Photo'))).brightness,
+      Brightness.dark,
+    );
+  });
+
+  testWidgets('AppCupertinoTheme maps Material colors to Cupertino actions', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: AppTheme.darkTheme,
+        home: AppCupertinoTheme(
+          child: Builder(
+            builder: (context) => Text(
+              'theme probe',
+              style: TextStyle(color: CupertinoTheme.of(context).primaryColor),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    expect(
+      tester.widget<Text>(find.text('theme probe')).style?.color,
+      AppTheme.darkTheme.colorScheme.primary,
+    );
+    expect(
+      CupertinoTheme.of(tester.element(find.text('theme probe'))).brightness,
+      Brightness.dark,
+    );
+    expect(
+      CupertinoTheme.of(
+        tester.element(find.text('theme probe')),
+      ).textTheme.actionTextStyle.fontSize,
+      17,
+    );
+  });
+
+  testWidgets('NqaaeApp is dark mode only', (WidgetTester tester) async {
+    tester.view.physicalSize = const Size(430, 1000);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(const ProviderScope(child: NqaaeApp()));
+
+    expect(
+      tester.widget<MaterialApp>(find.byType(MaterialApp)).themeMode,
+      ThemeMode.dark,
+    );
   });
 
   testWidgets('Dashboard home scrolls under notch with sticky shadow header', (

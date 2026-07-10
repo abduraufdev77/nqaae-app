@@ -19,6 +19,7 @@ import '../../../shared/widgets/glass_card.dart';
 import '../../../shared/layout/floating_navbar.dart';
 import '../../../shared/widgets/searchbar.dart';
 import '../../universities/providers/university_providers.dart';
+import '../../universities/models/university.dart';
 import '../../universities/widgets/nqaae_ui.dart';
 import '../../universities/widgets/university_item_card.dart';
 import '../../settings/screens/settings_screen.dart';
@@ -32,6 +33,7 @@ import '../widgets/types_of_education_section.dart';
 import '../widgets/survey_results_section.dart';
 import '../widgets/international_activity_section.dart';
 import '../widgets/buildings_facilities_section.dart';
+import '../widgets/university_dashboard_content.dart';
 
 class DashboardScreen extends ConsumerStatefulWidget {
   const DashboardScreen({super.key});
@@ -75,6 +77,13 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
   }
 
   void _onNavTap(int index) {
+    if (_selectedTabIndex != index) {
+      _searchDebounce?.cancel();
+      _searchController.clear();
+      if (_selectedTabIndex == 1) {
+        ref.read(universityListControllerProvider.notifier).refresh(search: '');
+      }
+    }
     setState(() => _selectedTabIndex = index);
     _tabController.animateTo(index);
   }
@@ -96,9 +105,18 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
     });
   }
 
+  void _selectUniversity(University university) {
+    ref.read(selectedUniversityIdProvider.notifier).state = university.sourceId;
+    _onNavTap(0);
+  }
+
   @override
   Widget build(BuildContext context) {
     final listState = ref.watch(universityListControllerProvider);
+    final selectedUniversityId = ref.watch(selectedUniversityIdProvider);
+    final selectedUniversity = selectedUniversityId == null
+        ? null
+        : ref.watch(universityDetailProvider(selectedUniversityId));
 
     return Scaffold(
       // backgroundColor: NqaaeColors.page,
@@ -114,6 +132,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
                     searchController: _searchController,
                     onSearchChanged: _onSearchChanged,
                     onVoiceSearch: () {},
+                    selectedUniversity: selectedUniversity,
                   ),
                   _UniversitiesTab(
                     scrollController: _scrollController,
@@ -124,6 +143,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
                         .read(universityListControllerProvider.notifier)
                         .refresh(search: _searchController.text),
                     onBack: () => _onNavTap(0),
+                    onUniversityTap: _selectUniversity,
                   ),
                   const _DashboardPlaceholderTab(
                     title: 'Reyting sahifasi',
@@ -190,25 +210,51 @@ class _DashboardHomeTab extends StatelessWidget {
     required this.searchController,
     required this.onSearchChanged,
     required this.onVoiceSearch,
+    required this.selectedUniversity,
   });
 
   final TextEditingController searchController;
   final ValueChanged<String> onSearchChanged;
   final VoidCallback onVoiceSearch;
+  final AsyncValue<University>? selectedUniversity;
 
   @override
   Widget build(BuildContext context) {
+    final detailState = selectedUniversity;
+    final selectedDetail = detailState is AsyncData<University>
+        ? detailState.value
+        : null;
+
     return CustomScrollView(
       physics: const BouncingScrollPhysics(),
       slivers: [
         AppScreenHeader(
           contentHeight: 72,
           shadowKey: const ValueKey('dashboard-home-top-shadow'),
-          leading: SizedBox(
+          leading: Container(
             key: const ValueKey('dashboard-header-logo'),
             width: 72,
             height: 72,
-            child: Image.asset('assets/images/university-logo.png'),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(99),
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(99),
+              child: selectedDetail?.logoUrl != null
+                  ? Image.network(
+                      selectedDetail!.logoUrl!,
+                      fit: BoxFit.contain,
+                      errorBuilder: (_, _, _) => Image.asset(
+                        'assets/images/university-logo.png',
+                        fit: BoxFit.contain,
+                      ),
+                    )
+                  : Image.asset(
+                      'assets/images/university-logo.png',
+                      fit: BoxFit.contain,
+                    ),
+            ),
           ),
           center: DashboardSearchBar(
             controller: searchController,
@@ -241,109 +287,128 @@ class _DashboardHomeTab extends StatelessWidget {
           ),
         ),
 
-        const AppSliverBox(
-          left: AppDesign.screenHorizontalPadding,
-          right: AppDesign.screenHorizontalPadding,
-          top: 24,
-          child: InstituteSummaryCard(),
-        ),
-
-        const AppSliverBox(
-          left: AppDesign.screenHorizontalPadding,
-          right: AppDesign.screenHorizontalPadding,
-          top: AppDesign.sectionTopGap,
-          bottom: 136,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TotalStudentsSection(),
-
-              SizedBox(height: 56),
-
-              SpecializationSection(),
-
-              SizedBox(height: 56),
-
-              TypesOfEducationSection(),
-
-              SizedBox(height: 56),
-
-              StudentContingentSection(),
-
-              SizedBox(height: 56),
-
-              ProfessorsCompositionSection(),
-
-              SizedBox(height: 56),
-
-              ScientificPotentialSection(),
-
-              SizedBox(height: 56),
-
-              SurveyResultsSection(),
-
-              SizedBox(height: 56),
-
-              InternationalActivitySection(),
-
-              SizedBox(height: 56),
-
-              BuildingsFacilitiesSection(),
-
-              SizedBox(height: 56),
-
-              AccreditationSection(),
-
-              SizedBox(height: 56),
-
-              NationalRatingSection(
-                metrics: [
-                  NationalRatingMetric(
-                    value: '36',
-                    label: 'Milliy reytingdagi o‘rni',
-                    assetName: 'assets/icons/bachelor.svg',
-                    gradient: AppColors.blueGradient,
-                    // onTap: () {
-                    //   // context.push('/national-rating/place');
-                    // },
-                  ),
-                  NationalRatingMetric(
-                    value: '467',
-                    label: 'Umumiy ballar',
-                    assetName: 'assets/icons/master.svg',
-                    gradient: AppColors.accentGradient,
-                  ),
-                ],
-              ),
-
-              // completed complex accreditation sample usage with values->
-              // AccreditationSection(
-              //   items: [
-              //     AccreditationItem(
-              //       type: AccreditationType.complexStateAccreditation,
-              //       status: AccreditationStatus.completed,
-              //       certificateNumber: 'AA-2026-001',
-              //       givenDate: '12.12.2026',
-              //       validUntil: '12.12.2031',
-              //       // onCertificateDownload: () {
-              //       //   // download certificate
-              //       // },
-              //     ),
-              //     AccreditationItem(
-              //       type: AccreditationType.specialStateAccreditation,
-              //       status: AccreditationStatus.pending,
-              //       accreditedProgramsCount: '0',
-              //     ),
-              //     AccreditationItem(
-              //       type: AccreditationType.internationalAccreditation,
-              //       status: AccreditationStatus.pending,
-              //       accreditedProgramsCount: '0',
-              //     ),
-              //   ],
-              // )
-            ],
+        if (selectedUniversity != null)
+          selectedUniversity!.when(
+            data: (university) => AppSliverBox(
+              left: AppDesign.screenHorizontalPadding,
+              right: AppDesign.screenHorizontalPadding,
+              top: 24,
+              bottom: 136,
+              child: UniversityDashboardContent(university: university),
+            ),
+            loading: () => const SliverFillRemaining(
+              hasScrollBody: false,
+              child: Center(child: CircularProgressIndicator()),
+            ),
+            error: (error, _) => SliverFillRemaining(
+              hasScrollBody: false,
+              child: _ErrorState(message: error.toString()),
+            ),
+          )
+        else ...[
+          const AppSliverBox(
+            left: AppDesign.screenHorizontalPadding,
+            right: AppDesign.screenHorizontalPadding,
+            top: 24,
+            child: InstituteSummaryCard(),
           ),
-        ),
+          const AppSliverBox(
+            left: AppDesign.screenHorizontalPadding,
+            right: AppDesign.screenHorizontalPadding,
+            top: AppDesign.sectionTopGap,
+            bottom: 136,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TotalStudentsSection(),
+
+                SizedBox(height: 56),
+
+                SpecializationSection(),
+
+                SizedBox(height: 56),
+
+                TypesOfEducationSection(),
+
+                SizedBox(height: 56),
+
+                StudentContingentSection(),
+
+                SizedBox(height: 56),
+
+                ProfessorsCompositionSection(),
+
+                SizedBox(height: 56),
+
+                ScientificPotentialSection(),
+
+                SizedBox(height: 56),
+
+                SurveyResultsSection(),
+
+                SizedBox(height: 56),
+
+                InternationalActivitySection(),
+
+                SizedBox(height: 56),
+
+                BuildingsFacilitiesSection(),
+
+                SizedBox(height: 56),
+
+                AccreditationSection(),
+
+                SizedBox(height: 56),
+
+                NationalRatingSection(
+                  metrics: [
+                    NationalRatingMetric(
+                      value: '36',
+                      label: 'Milliy reytingdagi o‘rni',
+                      assetName: 'assets/icons/bachelor.svg',
+                      gradient: AppColors.blueGradient,
+                      // onTap: () {
+                      //   // context.push('/national-rating/place');
+                      // },
+                    ),
+                    NationalRatingMetric(
+                      value: '467',
+                      label: 'Umumiy ballar',
+                      assetName: 'assets/icons/master.svg',
+                      gradient: AppColors.accentGradient,
+                    ),
+                  ],
+                ),
+
+                // completed complex accreditation sample usage with values->
+                // AccreditationSection(
+                //   items: [
+                //     AccreditationItem(
+                //       type: AccreditationType.complexStateAccreditation,
+                //       status: AccreditationStatus.completed,
+                //       certificateNumber: 'AA-2026-001',
+                //       givenDate: '12.12.2026',
+                //       validUntil: '12.12.2031',
+                //       // onCertificateDownload: () {
+                //       //   // download certificate
+                //       // },
+                //     ),
+                //     AccreditationItem(
+                //       type: AccreditationType.specialStateAccreditation,
+                //       status: AccreditationStatus.pending,
+                //       accreditedProgramsCount: '0',
+                //     ),
+                //     AccreditationItem(
+                //       type: AccreditationType.internationalAccreditation,
+                //       status: AccreditationStatus.pending,
+                //       accreditedProgramsCount: '0',
+                //     ),
+                //   ],
+                // )
+              ],
+            ),
+          ),
+        ],
       ],
     );
   }
@@ -357,6 +422,7 @@ class _UniversitiesTab extends StatelessWidget {
     required this.onSearchChanged,
     required this.onRefresh,
     required this.onBack,
+    required this.onUniversityTap,
   });
 
   final ScrollController scrollController;
@@ -365,6 +431,7 @@ class _UniversitiesTab extends StatelessWidget {
   final ValueChanged<String> onSearchChanged;
   final VoidCallback onRefresh;
   final VoidCallback onBack;
+  final ValueChanged<University> onUniversityTap;
 
   @override
   Widget build(BuildContext context) {
@@ -438,7 +505,7 @@ class _UniversitiesTab extends StatelessWidget {
                 }
                 return UniversityItemCard(
                   university: listState.items[index],
-                  onTap: onBack,
+                  onTap: () => onUniversityTap(listState.items[index]),
                 );
               },
             ),

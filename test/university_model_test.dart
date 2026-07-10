@@ -23,6 +23,15 @@ void main() {
           'negative_percent': 4.3,
         },
       ],
+      'accreditations': [
+        {
+          'accreditation_type': 'complex',
+          'status': "Akkreditatsiyadan o'tgan",
+          'is_completed': true,
+          'certificate_number': 'OT №123',
+          'certificate_url': 'https://nqaae.uz/certificate.pdf',
+        },
+      ],
     });
 
     expect(university.sourceId, 89);
@@ -30,6 +39,11 @@ void main() {
     expect(university.metrics.single.key, 'Jami talabalar');
     expect(university.directions.single.percent, 52);
     expect(university.surveys.single.positivePercent, 95.7);
+    expect(university.accreditations.single.isCompleted, isTrue);
+    expect(
+      university.accreditations.single.certificateUrl,
+      'https://nqaae.uz/certificate.pdf',
+    );
   });
 
   test('filters source soon and placeholder metrics from display data', () {

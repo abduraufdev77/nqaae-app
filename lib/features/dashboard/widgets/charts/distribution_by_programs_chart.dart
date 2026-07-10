@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../core/constants/app_colors.dart';
-import '../dashboard_section_card.dart';
 import 'chart_legend.dart';
 
 class ProgramDistributionItem {

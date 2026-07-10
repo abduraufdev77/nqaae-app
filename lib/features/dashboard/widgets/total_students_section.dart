@@ -13,6 +13,8 @@ class TotalStudentsSection extends StatelessWidget {
     this.cardTitle = 'Jami talabalar',
     this.total = '12 510',
     this.segments = defaultSegments,
+    this.professors = '229',
+    this.nationalRanking = '36',
     this.onTap,
   });
 
@@ -40,6 +42,8 @@ class TotalStudentsSection extends StatelessWidget {
   final String cardTitle;
   final String total;
   final List<RoundedPieChartSegment> segments;
+  final String professors;
+  final String nationalRanking;
   final VoidCallback? onTap;
 
   @override
@@ -62,13 +66,13 @@ class TotalStudentsSection extends StatelessWidget {
 
         const SizedBox(height: 10),
 
-        const Row(
+        Row(
           children: [
             Expanded(
               child: DashboardMetricTile(
                 icon: Iconsax.people,
                 iconPosition: DashboardMetricTileIconPosition.topLeft,
-                value: '229',
+                value: professors,
                 label: 'Professors and teachers',
                 variant: DashboardCardVariant.solid,
                 color: AppColors.primary,
@@ -77,12 +81,12 @@ class TotalStudentsSection extends StatelessWidget {
                 labelMaxLines: 1,
               ),
             ),
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
             Expanded(
               child: DashboardMetricTile(
                 icon: Iconsax.chart_2,
                 iconPosition: DashboardMetricTileIconPosition.topLeft,
-                value: '36',
+                value: nationalRanking,
                 label: 'National ranking position',
                 variant: DashboardCardVariant.solid,
                 color: AppColors.primary,

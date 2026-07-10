@@ -10,7 +10,8 @@ import '../charts/rounded_pie_chart.dart';
 import '../dashboard_section_card.dart';
 
 class SurveyResultsSheet extends StatelessWidget {
-  const SurveyResultsSheet({super.key, required this.assetPath});
+  const SurveyResultsSheet({super.key, this.assetPath, this.data})
+    : assert(assetPath != null || data != null);
 
   static const professorsAssetPath =
       'assets/data/survey/professors_survey_results.json';
@@ -18,12 +19,14 @@ class SurveyResultsSheet extends StatelessWidget {
   static const studentsAssetPath =
       'assets/data/survey/students_survey_results.json';
 
-  final String assetPath;
+  final String? assetPath;
+  final SurveyResultsData? data;
 
   static Future<T?> show<T>({
     required BuildContext context,
     required String title,
-    required String assetPath,
+    String? assetPath,
+    SurveyResultsData? data,
   }) {
     return showDashboardModalSheet<T>(
       context: context,
@@ -31,12 +34,13 @@ class SurveyResultsSheet extends StatelessWidget {
       direction: DashboardModalSheetDirection.bottom,
       background: DashboardModalSheetBackground.gradient,
       type: DashboardModalSheetType.fullScreen,
-      child: SurveyResultsSheet(assetPath: assetPath),
+      child: SurveyResultsSheet(assetPath: assetPath, data: data),
     );
   }
 
   Future<SurveyResultsData> _loadData() async {
-    final jsonString = await rootBundle.loadString(assetPath);
+    if (data != null) return data!;
+    final jsonString = await rootBundle.loadString(assetPath!);
     final decoded = jsonDecode(jsonString) as Map<String, dynamic>;
 
     return SurveyResultsData.fromJson(decoded);

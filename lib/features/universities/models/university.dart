@@ -259,6 +259,7 @@ class Accreditation {
   final String? issuedDate;
   final String? expiresDate;
   final String? certificateUrl;
+  final bool isCompleted;
 
   const Accreditation({
     required this.accreditationType,
@@ -267,6 +268,7 @@ class Accreditation {
     this.issuedDate,
     this.expiresDate,
     this.certificateUrl,
+    this.isCompleted = false,
   });
 
   factory Accreditation.fromJson(Map<String, dynamic> json) {
@@ -277,6 +279,7 @@ class Accreditation {
       issuedDate: json['issued_date'] as String?,
       expiresDate: json['expires_date'] as String?,
       certificateUrl: json['certificate_url'] as String?,
+      isCompleted: json['is_completed'] as bool? ?? false,
     );
   }
 }

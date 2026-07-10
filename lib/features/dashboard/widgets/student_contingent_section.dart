@@ -36,6 +36,8 @@ class StudentContingentSection extends StatelessWidget {
     this.total = '11 971',
     this.bachelor = '11 504',
     this.master = '467',
+    this.compactMetrics = defaultCompactMetrics,
+    this.graduateQuality = '565',
     this.onTap,
   });
 
@@ -45,6 +47,8 @@ class StudentContingentSection extends StatelessWidget {
   final String total;
   final String bachelor;
   final String master;
+  final List<StudentContingentMetric> compactMetrics;
+  final String graduateQuality;
   final VoidCallback? onTap;
 
   static const _masterGradient = LinearGradient(
@@ -58,6 +62,19 @@ class StudentContingentSection extends StatelessWidget {
     end: Alignment.centerRight,
     colors: [Color(0xFF2961BD), Color(0xFF659CEE)],
   );
+
+  static const defaultCompactMetrics = [
+    StudentContingentMetric(value: '2 455', label: 'Qabul qilinganlar'),
+    StudentContingentMetric(value: '756', label: 'Tamomlash darajasi'),
+    StudentContingentMetric(value: '565', label: 'Bitiruvchilar soni'),
+    StudentContingentMetric(
+      value: '756',
+      label: 'Bitiruvchilar bandlik darajasi',
+      badge: 'High',
+      badgeVariant: DashboardMetricTileBadgeVariant.gradient,
+      badgeGradient: _highBadgeGradient,
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -73,19 +90,6 @@ class StudentContingentSection extends StatelessWidget {
         label: 'Master',
         assetName: 'assets/icons/master.svg',
         gradient: _masterGradient,
-      ),
-    ];
-
-    const compactMetrics = [
-      StudentContingentMetric(value: '2 455', label: 'Qabul qilinganlar'),
-      StudentContingentMetric(value: '756', label: 'Tamomlash darajasi'),
-      StudentContingentMetric(value: '565', label: 'Bitiruvchilar soni'),
-      StudentContingentMetric(
-        value: '756',
-        label: 'Bitiruvchilar bandlik darajasi',
-        badge: 'High',
-        badgeVariant: DashboardMetricTileBadgeVariant.gradient,
-        badgeGradient: _highBadgeGradient,
       ),
     ];
 
@@ -111,7 +115,7 @@ class StudentContingentSection extends StatelessWidget {
 
           const SizedBox(height: 20),
 
-          const _ContingentRatioBar(),
+          _ContingentRatioBar(bachelor: bachelor, master: master),
 
           const SizedBox(height: 10),
 
@@ -167,7 +171,7 @@ class StudentContingentSection extends StatelessWidget {
 
           const SizedBox(height: 10),
 
-          const _GraduateQualityBanner(),
+          _GraduateQualityBanner(value: graduateQuality),
         ],
       ),
     );
@@ -224,16 +228,29 @@ class _MetricGrid extends StatelessWidget {
 }
 
 class _ContingentRatioBar extends StatelessWidget {
-  const _ContingentRatioBar();
+  const _ContingentRatioBar({required this.bachelor, required this.master});
+
+  final String bachelor;
+  final String master;
 
   @override
   Widget build(BuildContext context) {
+    final bachelorValue = _number(bachelor);
+    final masterValue = _number(master);
+    final total = bachelorValue + masterValue;
+    final bachelorPercent = total == 0 ? 0 : bachelorValue / total * 100;
+    final masterPercent = total == 0 ? 0 : masterValue / total * 100;
+    final bachelorFlex = total == 0
+        ? 1
+        : bachelorValue.round().clamp(1, 1000000);
+    final masterFlex = total == 0 ? 1 : masterValue.round().clamp(1, 1000000);
+
     return Column(
       children: [
         Row(
           children: [
             Text(
-              '96%',
+              '${bachelorPercent.toStringAsFixed(0)}%',
               style: DashboardTextStyles.text(
                 fontSize: 13,
                 weight: FontWeight.w900,
@@ -242,7 +259,7 @@ class _ContingentRatioBar extends StatelessWidget {
             ),
             const Spacer(),
             Text(
-              '4%',
+              '${masterPercent.toStringAsFixed(0)}%',
               style: DashboardTextStyles.text(
                 fontSize: 13,
                 weight: FontWeight.w900,
@@ -265,7 +282,7 @@ class _ContingentRatioBar extends StatelessWidget {
               child: Row(
                 children: [
                   Expanded(
-                    flex: 96,
+                    flex: bachelorFlex,
                     child: Container(
                       margin: const EdgeInsets.fromLTRB(5, 5, 3, 5),
                       decoration: BoxDecoration(
@@ -275,7 +292,7 @@ class _ContingentRatioBar extends StatelessWidget {
                     ),
                   ),
                   Expanded(
-                    flex: 4,
+                    flex: masterFlex,
                     child: Container(
                       margin: const EdgeInsets.fromLTRB(3, 5, 5, 5),
                       decoration: BoxDecoration(
@@ -292,10 +309,15 @@ class _ContingentRatioBar extends StatelessWidget {
       ],
     );
   }
+
+  double _number(String value) =>
+      double.tryParse(value.replaceAll(RegExp(r'[^0-9.]'), '')) ?? 0;
 }
 
 class _GraduateQualityBanner extends StatelessWidget {
-  const _GraduateQualityBanner();
+  const _GraduateQualityBanner({required this.value});
+
+  final String value;
 
   @override
   Widget build(BuildContext context) {
@@ -330,7 +352,7 @@ class _GraduateQualityBanner extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  '565',
+                  value,
                   style: DashboardTextStyles.text(
                     fontSize: 20,
                     weight: FontWeight.w900,

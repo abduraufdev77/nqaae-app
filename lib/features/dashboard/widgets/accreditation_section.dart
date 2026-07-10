@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nqaae_app/shared/widgets/metric_tile.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../shared/widgets/card.dart';
@@ -31,6 +32,8 @@ class AccreditationItem {
     this.givenDate,
     this.validUntil,
     this.accreditedProgramsCount = '0',
+    this.statusText,
+    this.certificateUrl,
     this.onCertificateDownload,
   });
 
@@ -45,6 +48,8 @@ class AccreditationItem {
   final String? givenDate;
   final String? validUntil;
   final String accreditedProgramsCount;
+  final String? statusText;
+  final String? certificateUrl;
   final VoidCallback? onCertificateDownload;
 }
 
@@ -322,7 +327,10 @@ class _CompletedAccreditationContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final steps = [
-      AccreditationStep(label: 'Holati:', value: 'Yakunlangan'),
+      AccreditationStep(
+        label: 'Holati:',
+        value: item.statusText ?? "Akkreditatsiyadan o'tgan",
+      ),
       AccreditationStep(
         label: 'Sertifikat raqami:',
         value: item.certificateNumber ?? '—',
@@ -362,7 +370,16 @@ class _CompletedAccreditationContent extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 14),
-        _CertificateDownloadButton(onPressed: item.onCertificateDownload),
+        _CertificateDownloadButton(
+          onPressed:
+              item.onCertificateDownload ??
+              (item.certificateUrl == null
+                  ? null
+                  : () => launchUrl(
+                      Uri.parse(item.certificateUrl!),
+                      mode: LaunchMode.externalApplication,
+                    )),
+        ),
       ],
     );
   }

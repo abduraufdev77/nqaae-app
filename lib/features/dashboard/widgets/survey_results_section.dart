@@ -9,12 +9,14 @@ import 'sheets/survey_results_sheet.dart';
 class SurveyResultItem {
   const SurveyResultItem({
     required this.label,
-    required this.assetPath,
+    this.assetPath,
+    this.data,
     this.onTap,
-  });
+  }) : assert(assetPath != null || data != null || onTap != null);
 
   final String label;
-  final String assetPath;
+  final String? assetPath;
+  final SurveyResultsData? data;
   final VoidCallback? onTap;
 }
 
@@ -49,6 +51,7 @@ class SurveyResultsSection extends StatelessWidget {
       context: context,
       title: item.label,
       assetPath: item.assetPath,
+      data: item.data,
     );
   }
 

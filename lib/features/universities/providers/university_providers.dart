@@ -7,6 +7,8 @@ final universityRepositoryProvider = Provider<UniversityRepository>(
   (ref) => UniversityRepository(),
 );
 
+final selectedUniversityIdProvider = StateProvider<int?>((ref) => null);
+
 final universityListProvider = FutureProvider<UniversityListResponse>((ref) {
   return ref.watch(universityRepositoryProvider).fetchUniversities();
 });
