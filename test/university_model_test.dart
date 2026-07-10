@@ -2,6 +2,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:nqaae_app/features/universities/models/university.dart';
 
 void main() {
+  test('spreadsheet error tokens are not displayable source values', () {
+    expect(isDisplayableSourceValue('#VALUE!'), isFalse);
+    expect(isDisplayableSourceValue('#N/A'), isFalse);
+    expect(isDisplayableSourceValue('#REF!'), isFalse);
+    expect(isDisplayableSourceValue('#DIV/0!'), isFalse);
+  });
+
   test('parses university detail json', () {
     final university = University.fromJson({
       'source_id': 89,

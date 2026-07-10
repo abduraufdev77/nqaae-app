@@ -182,6 +182,11 @@ bool isDisplayableSourceValue(String? value) {
   }
 
   final lower = normalized.toLowerCase();
+  if (RegExp(
+    r'^#(?:null!|div/0!|value!|ref!|name\?|num!|n/a|getting_data)$',
+  ).hasMatch(lower)) {
+    return false;
+  }
   if (lower.contains('tez kunda') ||
       lower.contains('soon') ||
       lower.contains('blur') ||
@@ -203,11 +208,7 @@ class EducationDirection {
   final int? value;
   final double? percent;
 
-  const EducationDirection({
-    required this.name,
-    this.value,
-    this.percent,
-  });
+  const EducationDirection({required this.name, this.value, this.percent});
 
   factory EducationDirection.fromJson(Map<String, dynamic> json) {
     return EducationDirection(

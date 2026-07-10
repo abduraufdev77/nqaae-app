@@ -331,6 +331,48 @@ void main() {
     expect(find.text('Sertifikat raqami:'), findsWidgets);
   });
 
+  testWidgets(
+    'University student totals render invalid source values as zero',
+    (tester) async {
+      const university = University(
+        sourceId: 404,
+        name: 'Invalid source values',
+        metrics: [
+          UniversityMetric(
+            section: 'summary',
+            key: 'Jami talabalar',
+            value: '#VALUE!',
+          ),
+        ],
+        studentBreakdowns: [
+          StudentBreakdown(label: 'Bakalavr', value: '#VALUE!'),
+          StudentBreakdown(label: 'Magistratura'),
+          StudentBreakdown(label: 'Doktorantura', value: '#N/A'),
+        ],
+      );
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: UniversityDashboardContent(university: university),
+            ),
+          ),
+        ),
+      );
+
+      final totalStudentsChart = tester.widget<RoundedPieChart>(
+        find.byType(RoundedPieChart).first,
+      );
+      expect(totalStudentsChart.centerValue, '0');
+      expect(
+        totalStudentsChart.segments.map((segment) => segment.value),
+        everyElement('0'),
+      );
+      expect(find.text('#VALUE!'), findsNothing);
+      expect(find.text('#N/A'), findsNothing);
+    },
+  );
+
   testWidgets('Universities header back button returns to dashboard tab', (
     WidgetTester tester,
   ) async {

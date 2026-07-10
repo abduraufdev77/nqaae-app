@@ -477,7 +477,36 @@ git add pubspec.yaml pubspec.lock lib/features/universities/widgets/university_l
 git commit -m "feat: persist university logo images"
 ```
 
-### Task 5: Verify the complete cache behavior
+### Task 5: Normalize invalid university student values
+
+**Files:**
+- Modify: `lib/features/universities/models/university.dart`
+- Modify: `test/university_model_test.dart`
+- Modify: `test/widget_test.dart`
+
+**Interfaces:** Extends `isDisplayableSourceValue` so spreadsheet error tokens are treated as missing and existing university-dashboard fallbacks render `0`.
+
+- [ ] **Step 1: Add a failing source-value test**
+
+Assert `#VALUE!`, `#N/A`, `#REF!`, and `#DIV/0!` are not displayable.
+
+- [ ] **Step 2: Verify RED**
+
+Run: `flutter test test/university_model_test.dart --plain-name "spreadsheet error tokens are not displayable source values"`
+
+Expected: FAIL because the tokens currently pass validation.
+
+- [ ] **Step 3: Reject spreadsheet errors at the shared validator**
+
+Match the complete normalized token against Excel error forms before the existing placeholder checks.
+
+- [ ] **Step 4: Add and run the details-dashboard regression**
+
+Run: `flutter test test/widget_test.dart --plain-name "University student totals render invalid source values as zero"`
+
+Expected: PASS with total and all invalid/null breakdown segments equal to `0`.
+
+### Task 6: Verify the complete cache behavior
 
 **Files:**
 - Modify only files needed to fix failures directly caused by Tasks 1–4.
@@ -514,4 +543,3 @@ Expected: no whitespace errors; only the plan or any intentional uncommitted ver
 git add <only-files-changed-to-fix-verification>
 git commit -m "test: verify university cache behavior"
 ```
-
